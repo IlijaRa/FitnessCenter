@@ -955,6 +955,9 @@
       "FitnessCenterLibrary/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore.SqlServer": "6.0.9"
+        },
         "compile": {
           "bin/placeholder/FitnessCenterLibrary.dll": {}
         },

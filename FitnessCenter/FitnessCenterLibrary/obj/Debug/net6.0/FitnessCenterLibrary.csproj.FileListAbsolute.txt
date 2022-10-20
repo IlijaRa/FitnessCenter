@@ -1,0 +1,14 @@
+D:\GitHubRepositories\FitnessCenter\FitnessCenter\FitnessCenterLibrary\bin\Debug\net6.0\FitnessCenterLibrary.deps.json
+D:\GitHubRepositories\FitnessCenter\FitnessCenter\FitnessCenterLibrary\bin\Debug\net6.0\FitnessCenterLibrary.dll
+D:\GitHubRepositories\FitnessCenter\FitnessCenter\FitnessCenterLibrary\bin\Debug\net6.0\FitnessCenterLibrary.pdb
+D:\GitHubRepositories\FitnessCenter\FitnessCenter\FitnessCenterLibrary\obj\Debug\net6.0\FitnessCenterLibrary.csproj.AssemblyReference.cache
+D:\GitHubRepositories\FitnessCenter\FitnessCenter\FitnessCenterLibrary\obj\Debug\net6.0\FitnessCenterLibrary.GeneratedMSBuildEditorConfig.editorconfig
+D:\GitHubRepositories\FitnessCenter\FitnessCenter\FitnessCenterLibrary\obj\Debug\net6.0\FitnessCenterLibrary.AssemblyInfoInputs.cache
+D:\GitHubRepositories\FitnessCenter\FitnessCenter\FitnessCenterLibrary\obj\Debug\net6.0\FitnessCenterLibrary.AssemblyInfo.cs
+D:\GitHubRepositories\FitnessCenter\FitnessCenter\FitnessCenterLibrary\obj\Debug\net6.0\FitnessCenterLibrary.csproj.CoreCompileInputs.cache
+D:\GitHubRepositories\FitnessCenter\FitnessCenter\FitnessCenterLibrary\obj\Debug\net6.0\FitnessCenterLibrary.dll
+D:\GitHubRepositories\FitnessCenter\FitnessCenter\FitnessCenterLibrary\obj\Debug\net6.0\refint\FitnessCenterLibrary.dll
+D:\GitHubRepositories\FitnessCenter\FitnessCenter\FitnessCenterLibrary\obj\Debug\net6.0\FitnessCenterLibrary.pdb
+D:\GitHubRepositories\FitnessCenter\FitnessCenter\FitnessCenterLibrary\obj\Debug\net6.0\ref\FitnessCenterLibrary.dll
+D:\GitHubRepositories\FitnessCenter\FitnessCenter\FitnessCenterLibrary\bin\Debug\net6.0\FitnessCenterLibrary.runtimeconfig.json
+D:\GitHubRepositories\FitnessCenter\FitnessCenter\FitnessCenterLibrary\obj\Debug\net6.0\FitnessCenterLibrary.genruntimeconfig.cache
