@@ -5,6 +5,8 @@ VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitnessCenterMVC", "FitnessCenterMVC\FitnessCenterMVC.csproj", "{84B81885-82A7-4880-9912-93E56BDA1DAF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitnessCenterLibrary", "FitnessCenterLibrary\FitnessCenterLibrary.csproj", "{59EC54A8-1AF1-49F1-B4F7-DDD58D5BEDDB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{84B81885-82A7-4880-9912-93E56BDA1DAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84B81885-82A7-4880-9912-93E56BDA1DAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84B81885-82A7-4880-9912-93E56BDA1DAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59EC54A8-1AF1-49F1-B4F7-DDD58D5BEDDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59EC54A8-1AF1-49F1-B4F7-DDD58D5BEDDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59EC54A8-1AF1-49F1-B4F7-DDD58D5BEDDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59EC54A8-1AF1-49F1-B4F7-DDD58D5BEDDB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
