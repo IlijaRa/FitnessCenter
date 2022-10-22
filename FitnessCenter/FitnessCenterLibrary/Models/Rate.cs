@@ -8,9 +8,7 @@ namespace FitnessCenterLibrary.Models
 {
     public class Rate
     {
-        public Guid Id { get; set; }
-        public int MemberId { get; set; }
-        public int CoachId { get; set; }
+        public int Id { get; set; }
         public double Rating { get; set; }
     }
 }

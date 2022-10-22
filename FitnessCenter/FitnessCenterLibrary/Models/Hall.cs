@@ -8,9 +8,9 @@ namespace FitnessCenterLibrary.Models
 {
     public class Hall
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public int Capacity { get; set; }
         public string HallMark { get; set; }
-        public List<Workout> workout_schedule { get; set; }
+        public List<Workout> workout_schedule { get; set; } = new List<Workout>();
     }
 }
