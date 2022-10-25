@@ -1,0 +1,59 @@
+/*-----Tables-----*/
+User({Id, UserName, Password, Name, Surname, PhoneNumber, EmailAddress, DateOfBirth, IsActive}, {Id})
+Coach({Id, FitCenId, Rating}, {Id})
+FitnessCenterMember({Id, ...}, {Id})
+Administrator({Id, ...}, {Id})
+FitnessMemberWorkout({MemberId, WorkoutId, State, Rate}, {MemberId + WorkoutId})
+Term({CoachId, WorkoutId, Price, NumberOfMembers}, {CoachId + WorkoutId})
+Workout({Id, Title, Description, Type, StartTime, EndTime, CoachId}, {Id})
+FitnessCenter({Id, Title, PhoneNumber, EmailAddress, Street, Number, City, ZipCode}, {Id})
+Hall({Id, Capacity, HallMark, FitCenId}, {Id})
+FitnessCenterHall({FitCenId, HallId}, {FitCenId + HallId})
+Schedule({FitCenId, HallId, CoachId, WorkoutId}, {FitCenId + HallId + CoachId + WorkoutId})
+
+/*-----Constraints-----*/
+Coach[Id] ⊆ User[Id]
+FitnessCenterMember[Id] ⊆ User[Id]
+Administrator[Id] ⊆ User[Id]
+
+User[Id] ⊆ Coach[Id] ∪ FitnessCenterMember[Id] ∪ Administrator[Id]
+
+Coach[Id] ∩ FitnessCenterMember[Id] = Ø ∧ 
+Coach[Id] ∩ Administrator[Id] = Ø ∧ 
+Administrator ∩ FitnessCenterMembe [Id] = Ø
+
+id(FitnessCenterMember, State) = (DUIo, ⊥)
+DUIo(Number, 1, d ∈ {0, 1})
+    * 0 - NonCompleted,
+    * 1 - Completed,
+=> dom(FitnessCenterMember, State) = {0, 1}
+
+FitnessMemberWorkout[MemberId] ⊆ FitnessCenterMember[Id]
+FitnessMemberWorkout[WorkoutId] ⊆ Workout[Id]
+Null(FitnessMemberWorkout, Rate) = T
+
+id(Workout, Type) = (DUIo, ⊥)
+DUIo(Number, 1, d ∈ {0, 1, 2})
+    * 0 - Conditional,
+    * 1 - PowerLifting,
+    * 2 - Bodybuilding
+=> dom(Workout, Type) = {0, 1, 2}
+
+Workout[CoachId] ⊆ Coach[Id]
+Null(Workout, CoachId) = ⊥
+
+Hall[FitCenId] ⊆ FitnessCenter[Id]
+FitnessCenter[Id] ⊆ Hall[FitCenId]
+Null(Hall, FitCenId) = ⊥
+
+Coach[FitCenId] ⊆ FitnessCenter[Id]
+FitnessCenter[Id] ⊆ Coach[FitCenId]
+Null(Coach, FitCenId) = ⊥
+
+FitnessCenterHall[FitCenId] ⊆ FitnessCenter[Id]
+FitnessCenterHall[HallId] ⊆ Hall[Id]
+
+Schedule[FitCenId] ⊆ FitnessCenter[Id]
+Schedule[HallId] ⊆ Hall[Id]
+Schedule[CoachId] ⊆ Coach[Id]
+Schedule[WorkoutId] ⊆ Workout[Id]
