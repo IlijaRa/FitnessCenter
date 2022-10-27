@@ -21,5 +21,11 @@ namespace FitnessCenterLibrary.Models
             PowerLifting,
             Bodybuilding
         }
+
+        public enum WorkoutState
+        {
+            NonCompleted,
+            Completed
+        }
     }
 }

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace FitnessCenterMVC.Data.Migrations
+namespace FitnessCenterMVC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -22,7 +22,7 @@ namespace FitnessCenterMVC.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("FitnessCenterLibrary.Models.Address", b =>
+            modelBuilder.Entity("FitnessCenterLibrary.Models.FitnessCenter", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -32,15 +32,32 @@ namespace FitnessCenterMVC.Data.Migrations
 
                     b.Property<string>("City")
                         .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("EmailAddress")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Number")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
 
                     b.Property<string>("Street")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("ZipCode")
                         .IsRequired()
@@ -48,37 +65,46 @@ namespace FitnessCenterMVC.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Address");
+                    b.ToTable("FitnessCenter");
                 });
 
-            modelBuilder.Entity("FitnessCenterLibrary.Models.FitnessCenter", b =>
+            modelBuilder.Entity("FitnessCenterLibrary.Models.FitnessCenterHall", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("HallId")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("AddressId")
+                    b.Property<int>("FitnessCenterId")
                         .HasColumnType("int");
 
-                    b.Property<string>("EmailAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("HallId", "FitnessCenterId");
 
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasIndex("FitnessCenterId");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasIndex("HallId")
+                        .IsUnique();
 
-                    b.HasKey("Id");
+                    b.ToTable("FitnessCenterHall");
+                });
 
-                    b.HasIndex("AddressId");
+            modelBuilder.Entity("FitnessCenterLibrary.Models.FitnessMemberWorkout", b =>
+                {
+                    b.Property<string>("FitnessCenterMemberId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.ToTable("FitnessCenter");
+                    b.Property<int>("WorkoutId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Rate")
+                        .HasColumnType("float");
+
+                    b.Property<int>("State")
+                        .HasColumnType("int");
+
+                    b.HasKey("FitnessCenterMemberId", "WorkoutId");
+
+                    b.HasIndex("WorkoutId");
+
+                    b.ToTable("FitnessMemberWorkout");
                 });
 
             modelBuilder.Entity("FitnessCenterLibrary.Models.Hall", b =>
@@ -92,12 +118,13 @@ namespace FitnessCenterMVC.Data.Migrations
                     b.Property<int>("Capacity")
                         .HasColumnType("int");
 
-                    b.Property<int?>("FitnessCenterId")
+                    b.Property<int>("FitnessCenterId")
                         .HasColumnType("int");
 
                     b.Property<string>("HallMark")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.HasKey("Id");
 
@@ -106,78 +133,56 @@ namespace FitnessCenterMVC.Data.Migrations
                     b.ToTable("Hall");
                 });
 
-            modelBuilder.Entity("FitnessCenterLibrary.Models.Rate", b =>
+            modelBuilder.Entity("FitnessCenterLibrary.Models.Schedule", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("FitnessCenterHallId")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int?>("FitnessCenterMemberId")
+                    b.Property<int>("TermId")
                         .HasColumnType("int");
 
-                    b.Property<double>("Rating")
-                        .HasColumnType("float");
+                    b.Property<int>("FitnessCenterHallFitnessCenterId")
+                        .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.Property<int>("FitnessCenterHallHallId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("FitnessCenterMemberId");
+                    b.Property<string>("TermCoachId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.ToTable("Rate");
+                    b.Property<int>("TermWorkoutId")
+                        .HasColumnType("int");
+
+                    b.HasKey("FitnessCenterHallId", "TermId");
+
+                    b.HasIndex("FitnessCenterHallHallId", "FitnessCenterHallFitnessCenterId");
+
+                    b.HasIndex("TermCoachId", "TermWorkoutId");
+
+                    b.ToTable("Schedule");
                 });
 
-            modelBuilder.Entity("FitnessCenterLibrary.Models.User", b =>
+            modelBuilder.Entity("FitnessCenterLibrary.Models.Term", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<string>("CoachId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("WorkoutId")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("DateOfBirth")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EmailAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Role")
+                    b.Property<int>("NumberOfMembers")
                         .HasColumnType("int");
 
-                    b.Property<string>("Surname")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
 
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("CoachId", "WorkoutId");
 
-                    b.HasKey("Id");
+                    b.HasIndex("WorkoutId")
+                        .IsUnique();
 
-                    b.ToTable("User");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("User");
+                    b.ToTable("Term");
                 });
 
             modelBuilder.Entity("FitnessCenterLibrary.Models.Workout", b =>
@@ -188,62 +193,34 @@ namespace FitnessCenterMVC.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("CoachId")
-                        .HasColumnType("int");
+                    b.Property<string>("CoachId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)");
 
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<int?>("FitnessCenterId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("HallId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsCompleted")
-                        .HasColumnType("bit");
-
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
 
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("WorkoutType")
+                    b.Property<int>("Type")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CoachId");
 
-                    b.HasIndex("FitnessCenterId");
-
-                    b.HasIndex("HallId");
-
                     b.ToTable("Workout");
-                });
-
-            modelBuilder.Entity("FitnessCenterMemberWorkout", b =>
-                {
-                    b.Property<int>("all_workoutsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("workout_membersId")
-                        .HasColumnType("int");
-
-                    b.HasKey("all_workoutsId", "workout_membersId");
-
-                    b.HasIndex("workout_membersId");
-
-                    b.ToTable("FitnessCenterMemberWorkout");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -310,6 +287,10 @@ namespace FitnessCenterMVC.Data.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -361,6 +342,8 @@ namespace FitnessCenterMVC.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -450,20 +433,66 @@ namespace FitnessCenterMVC.Data.Migrations
 
             modelBuilder.Entity("FitnessCenterLibrary.Models.Administrator", b =>
                 {
-                    b.HasBaseType("FitnessCenterLibrary.Models.User");
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("EmploymentDay")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Surname")
+                        .IsRequired()
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("YearsOfExperience")
+                        .HasColumnType("int");
 
                     b.HasDiscriminator().HasValue("Administrator");
                 });
 
             modelBuilder.Entity("FitnessCenterLibrary.Models.Coach", b =>
                 {
-                    b.HasBaseType("FitnessCenterLibrary.Models.User");
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
-                    b.Property<int?>("FitnessCenterId")
+                    b.Property<DateTime>("DateOfBirth")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("FitnessCenterId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<double>("Rating")
                         .HasColumnType("float");
+
+                    b.Property<string>("Surname")
+                        .IsRequired()
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasIndex("FitnessCenterId");
 
@@ -472,64 +501,130 @@ namespace FitnessCenterMVC.Data.Migrations
 
             modelBuilder.Entity("FitnessCenterLibrary.Models.FitnessCenterMember", b =>
                 {
-                    b.HasBaseType("FitnessCenterLibrary.Models.User");
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FirstMembership")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Surname")
+                        .IsRequired()
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasDiscriminator().HasValue("FitnessCenterMember");
                 });
 
-            modelBuilder.Entity("FitnessCenterLibrary.Models.FitnessCenter", b =>
+            modelBuilder.Entity("FitnessCenterLibrary.Models.FitnessCenterHall", b =>
                 {
-                    b.HasOne("FitnessCenterLibrary.Models.Address", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressId")
+                    b.HasOne("FitnessCenterLibrary.Models.FitnessCenter", "FitnessCenter")
+                        .WithMany("FitnessCenterHalls")
+                        .HasForeignKey("FitnessCenterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Address");
+                    b.HasOne("FitnessCenterLibrary.Models.Hall", "Hall")
+                        .WithOne("FitnessCenterHall")
+                        .HasForeignKey("FitnessCenterLibrary.Models.FitnessCenterHall", "HallId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FitnessCenter");
+
+                    b.Navigation("Hall");
+                });
+
+            modelBuilder.Entity("FitnessCenterLibrary.Models.FitnessMemberWorkout", b =>
+                {
+                    b.HasOne("FitnessCenterLibrary.Models.FitnessCenterMember", "FitnessCenterMember")
+                        .WithMany("FitnessMemberWorkouts")
+                        .HasForeignKey("FitnessCenterMemberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FitnessCenterLibrary.Models.Workout", "Workout")
+                        .WithMany("FitnessMemberWorkouts")
+                        .HasForeignKey("WorkoutId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FitnessCenterMember");
+
+                    b.Navigation("Workout");
                 });
 
             modelBuilder.Entity("FitnessCenterLibrary.Models.Hall", b =>
                 {
-                    b.HasOne("FitnessCenterLibrary.Models.FitnessCenter", null)
-                        .WithMany("halls")
-                        .HasForeignKey("FitnessCenterId");
+                    b.HasOne("FitnessCenterLibrary.Models.FitnessCenter", "FitnessCenter")
+                        .WithMany("Halls")
+                        .HasForeignKey("FitnessCenterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FitnessCenter");
                 });
 
-            modelBuilder.Entity("FitnessCenterLibrary.Models.Rate", b =>
+            modelBuilder.Entity("FitnessCenterLibrary.Models.Schedule", b =>
                 {
-                    b.HasOne("FitnessCenterLibrary.Models.FitnessCenterMember", null)
-                        .WithMany("workout_rates")
-                        .HasForeignKey("FitnessCenterMemberId");
+                    b.HasOne("FitnessCenterLibrary.Models.FitnessCenterHall", "FitnessCenterHall")
+                        .WithMany("Schedules")
+                        .HasForeignKey("FitnessCenterHallHallId", "FitnessCenterHallFitnessCenterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FitnessCenterLibrary.Models.Term", "Term")
+                        .WithMany("Schedules")
+                        .HasForeignKey("TermCoachId", "TermWorkoutId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FitnessCenterHall");
+
+                    b.Navigation("Term");
+                });
+
+            modelBuilder.Entity("FitnessCenterLibrary.Models.Term", b =>
+                {
+                    b.HasOne("FitnessCenterLibrary.Models.Coach", "Coach")
+                        .WithMany("Terms")
+                        .HasForeignKey("CoachId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FitnessCenterLibrary.Models.Workout", "Workout")
+                        .WithOne("Term")
+                        .HasForeignKey("FitnessCenterLibrary.Models.Term", "WorkoutId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Coach");
+
+                    b.Navigation("Workout");
                 });
 
             modelBuilder.Entity("FitnessCenterLibrary.Models.Workout", b =>
                 {
-                    b.HasOne("FitnessCenterLibrary.Models.Coach", null)
-                        .WithMany("workout_appointments")
-                        .HasForeignKey("CoachId");
-
-                    b.HasOne("FitnessCenterLibrary.Models.FitnessCenter", null)
-                        .WithMany("workout_schedule")
-                        .HasForeignKey("FitnessCenterId");
-
-                    b.HasOne("FitnessCenterLibrary.Models.Hall", null)
-                        .WithMany("workout_schedule")
-                        .HasForeignKey("HallId");
-                });
-
-            modelBuilder.Entity("FitnessCenterMemberWorkout", b =>
-                {
-                    b.HasOne("FitnessCenterLibrary.Models.Workout", null)
-                        .WithMany()
-                        .HasForeignKey("all_workoutsId")
+                    b.HasOne("FitnessCenterLibrary.Models.Coach", "Coach")
+                        .WithMany("Workouts")
+                        .HasForeignKey("CoachId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FitnessCenterLibrary.Models.FitnessCenterMember", null)
-                        .WithMany()
-                        .HasForeignKey("workout_membersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Coach");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -585,33 +680,58 @@ namespace FitnessCenterMVC.Data.Migrations
 
             modelBuilder.Entity("FitnessCenterLibrary.Models.Coach", b =>
                 {
-                    b.HasOne("FitnessCenterLibrary.Models.FitnessCenter", null)
-                        .WithMany("coaches")
-                        .HasForeignKey("FitnessCenterId");
+                    b.HasOne("FitnessCenterLibrary.Models.FitnessCenter", "FitnessCenter")
+                        .WithMany("Coaches")
+                        .HasForeignKey("FitnessCenterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FitnessCenter");
                 });
 
             modelBuilder.Entity("FitnessCenterLibrary.Models.FitnessCenter", b =>
                 {
-                    b.Navigation("coaches");
+                    b.Navigation("Coaches");
 
-                    b.Navigation("halls");
+                    b.Navigation("FitnessCenterHalls");
 
-                    b.Navigation("workout_schedule");
+                    b.Navigation("Halls");
+                });
+
+            modelBuilder.Entity("FitnessCenterLibrary.Models.FitnessCenterHall", b =>
+                {
+                    b.Navigation("Schedules");
                 });
 
             modelBuilder.Entity("FitnessCenterLibrary.Models.Hall", b =>
                 {
-                    b.Navigation("workout_schedule");
+                    b.Navigation("FitnessCenterHall")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("FitnessCenterLibrary.Models.Term", b =>
+                {
+                    b.Navigation("Schedules");
+                });
+
+            modelBuilder.Entity("FitnessCenterLibrary.Models.Workout", b =>
+                {
+                    b.Navigation("FitnessMemberWorkouts");
+
+                    b.Navigation("Term")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("FitnessCenterLibrary.Models.Coach", b =>
                 {
-                    b.Navigation("workout_appointments");
+                    b.Navigation("Terms");
+
+                    b.Navigation("Workouts");
                 });
 
             modelBuilder.Entity("FitnessCenterLibrary.Models.FitnessCenterMember", b =>
                 {
-                    b.Navigation("workout_rates");
+                    b.Navigation("FitnessMemberWorkouts");
                 });
 #pragma warning restore 612, 618
         }

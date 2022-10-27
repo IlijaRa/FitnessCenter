@@ -1,0 +1,10 @@
+﻿---Adding a migration---
+1. Add-Migration "Migration name" [-context -DbContextName]
+2. Update-Database
+
+---Refreshing migrations---
+1.Remove all files from the migrations folder.
+2.For Package Manager Console
+	a)Drop-Database -Force -Verbose
+	b)Add-Migration Initial
+	c)Update-Database

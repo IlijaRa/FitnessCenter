@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,19 +10,39 @@ namespace FitnessCenterLibrary.Models
     public class Workout
     {
         public int Id { get; set; }
+
+
+        [DataType(DataType.Text)]
+        [Required(ErrorMessage = "You need to provide a title.")]
+        [StringLength(50, MinimumLength = 3, ErrorMessage = "You need to provide a title between 3-50 characters.")]
         public string Title { get; set; }
+
+
+        [DataType(DataType.MultilineText)]
+        [Required(ErrorMessage = "You need to provide a description.")]
+        [StringLength(4000, MinimumLength = 1, ErrorMessage = "You need to provide a description between 1-4000 characters.")]
         public string Description { get; set; }
-        public Enums.WorkoutType WorkoutType { get; set; }
+
+
+        [Required(ErrorMessage = "You need to provide a type of training.")]
+        public Enums.WorkoutType Type { get; set; }
+
+
+        [Display(Name = "Start time")]
+        [DataType(DataType.DateTime)]
+        [Required(ErrorMessage = "You need to provide start time")]
         public DateTime StartTime { get; set; }
+
+
+        [Display(Name = "End time")]
+        [DataType(DataType.DateTime)]
+        [Required(ErrorMessage = "You need to provide end time")]
         public DateTime EndTime { get; set; }
-        public List<FitnessCenterMember> workout_members { get; set; } = new List<FitnessCenterMember>();
-        public bool IsCompleted { get; set; }
-        public double Price { get; set; }
 
-
-        public int GetNumberOfMembers()
-        {
-            return workout_members.Count();
-        }
+        //navigation properties
+        public ICollection<FitnessMemberWorkout> FitnessMemberWorkouts { get; set; }
+        public string CoachId { get; set; } //string because IdentityUser id is string type
+        public Coach Coach { get; set; }
+        public Term Term { get; set; }
     }
 }
