@@ -1,6 +1,8 @@
 ﻿using FitnessCenterLibrary.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.Contracts;
+using System.Text.RegularExpressions;
 
 namespace FitnessCenterMVC.Data
 {
@@ -14,26 +16,21 @@ namespace FitnessCenterMVC.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            /*This code makes composite keys*/
+
+            //This code makes composite keys
             modelBuilder.Entity<FitnessMemberWorkout>().HasKey(sc => new { sc.FitnessCenterMemberId, sc.WorkoutId });
             modelBuilder.Entity<FitnessCenterHall>().HasKey(sc => new { sc.HallId, sc.FitnessCenterId });
             modelBuilder.Entity<Term>().HasKey(sc => new { sc.CoachId, sc.WorkoutId });
             modelBuilder.Entity<Schedule>().HasKey(sc => new { sc.FitnessCenterHallId, sc.TermId });
 
-            //modelBuilder.Entity<User>()
-            //.HasOne<Coach>(s => s.Coach)
-            //.WithOne(ad => ad.User)
-            //.HasForeignKey<Coach>(ad => ad.UserId);
+            // Set the default table name of AspNetUsers(for example when you want to register User )
+            modelBuilder.Entity<User>(config => { config.ToTable("AspNetUsers"); });
 
-            //modelBuilder.Entity<User>()
-            //.HasOne<FitnessCenterMember>(s => s.FitnessCenterMember)
-            //.WithOne(ad => ad.User)
-            //.HasForeignKey<FitnessCenterMember>(ad => ad.UserId);
-
-            //modelBuilder.Entity<User>()
-            //.HasOne<Administrator>(s => s.Administrator)
-            //.WithOne(ad => ad.User)
-            //.HasForeignKey<Administrator>(ad => ad.UserId);
+            // Defines values for Discriminator column
+            modelBuilder.Entity<User>()
+                .HasDiscriminator<string>("Discriminator")
+                .HasValue<FitnessCenterMember>("FitnessCenterMember")
+                .HasValue<Coach>("Coach");
         }
 
         public DbSet<Administrator> Administrator { get; set; }

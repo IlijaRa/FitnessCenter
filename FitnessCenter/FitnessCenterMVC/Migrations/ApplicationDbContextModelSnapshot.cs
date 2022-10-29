@@ -17,7 +17,7 @@ namespace FitnessCenterMVC.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.9")
+                .HasAnnotation("ProductVersion", "6.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -431,32 +431,37 @@ namespace FitnessCenterMVC.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("FitnessCenterLibrary.Models.Administrator", b =>
+            modelBuilder.Entity("FitnessCenterLibrary.Models.User", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
                     b.Property<DateTime>("DateOfBirth")
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("EmploymentDay")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsActive")
-                        .ValueGeneratedOnUpdateSometimes()
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .ValueGeneratedOnUpdateSometimes()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Surname")
                         .IsRequired()
-                        .ValueGeneratedOnUpdateSometimes()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasDiscriminator().HasValue("User");
+                });
+
+            modelBuilder.Entity("FitnessCenterLibrary.Models.Administrator", b =>
+                {
+                    b.HasBaseType("FitnessCenterLibrary.Models.User");
+
+                    b.Property<DateTime>("EmploymentDay")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("YearsOfExperience")
                         .HasColumnType("int");
@@ -466,33 +471,13 @@ namespace FitnessCenterMVC.Migrations
 
             modelBuilder.Entity("FitnessCenterLibrary.Models.Coach", b =>
                 {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
-
-                    b.Property<DateTime>("DateOfBirth")
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("datetime2");
+                    b.HasBaseType("FitnessCenterLibrary.Models.User");
 
                     b.Property<int>("FitnessCenterId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
                     b.Property<double>("Rating")
                         .HasColumnType("float");
-
-                    b.Property<string>("Surname")
-                        .IsRequired()
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
 
                     b.HasIndex("FitnessCenterId");
 
@@ -501,30 +486,10 @@ namespace FitnessCenterMVC.Migrations
 
             modelBuilder.Entity("FitnessCenterLibrary.Models.FitnessCenterMember", b =>
                 {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
-
-                    b.Property<DateTime>("DateOfBirth")
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("datetime2");
+                    b.HasBaseType("FitnessCenterLibrary.Models.User");
 
                     b.Property<DateTime>("FirstMembership")
                         .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Surname")
-                        .IsRequired()
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
 
                     b.HasDiscriminator().HasValue("FitnessCenterMember");
                 });
