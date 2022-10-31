@@ -18,6 +18,7 @@ using FitnessCenterLibrary.Models;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using FitnessCenterMVC.Data;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace FitnessCenterMVC.Areas.Identity.Pages.Account
 {
@@ -28,14 +29,13 @@ namespace FitnessCenterMVC.Areas.Identity.Pages.Account
         private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
 
-        public LoginModel(SignInManager<User> signInManager, ILogger<LoginModel> logger, UserManager<User> userManager)
+        public LoginModel(SignInManager<User> signInManager, ILogger<LoginModel> logger, ApplicationDbContext context, UserManager<User> userManager)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _context = context;
             _userManager = userManager;
         }
-
-        private Task<User> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -110,20 +110,20 @@ namespace FitnessCenterMVC.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
+                var user = await _userManager.FindByNameAsync(Input.UserName);
+
+                // Checks if current user has isActive field = true, if not, than he can't login
+                if (!user.IsActive)
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt, because your account is set to inactive.");
+                    return Page();
+                }
+
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(Input.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    //TODO: check if current user has isActive field = true, if not, than he can't login
-                    //var user = await GetCurrentUserAsync();
-                    
-                    //if (!user.IsActive)
-                    //{
-                    //    // If we got this far, isActive == false, redisplay form
-                    //    return Page();
-                    //}
-
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }
