@@ -15,6 +15,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using FitnessCenterLibrary.Models;
+using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
+using FitnessCenterMVC.Data;
 
 namespace FitnessCenterMVC.Areas.Identity.Pages.Account
 {
@@ -22,12 +25,17 @@ namespace FitnessCenterMVC.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<User> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public LoginModel(SignInManager<User> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<User> signInManager, ILogger<LoginModel> logger, UserManager<User> userManager)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _userManager = userManager;
         }
+
+        private Task<User> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -107,6 +115,15 @@ namespace FitnessCenterMVC.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    //TODO: check if current user has isActive field = true, if not, than he can't login
+                    //var user = await GetCurrentUserAsync();
+                    
+                    //if (!user.IsActive)
+                    //{
+                    //    // If we got this far, isActive == false, redisplay form
+                    //    return Page();
+                    //}
+
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }

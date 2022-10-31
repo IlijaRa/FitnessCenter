@@ -1,4 +1,6 @@
-﻿using FitnessCenterMVC.Models;
+﻿using FitnessCenterLibrary.Models;
+using FitnessCenterMVC.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -20,6 +22,7 @@ namespace FitnessCenterMVC.Controllers
 
         public IActionResult Privacy()
         {
+
             return View();
         }
 

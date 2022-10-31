@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -13,6 +14,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FitnessCenterLibrary.Models;
 using FitnessCenterMVC.Data;
+using FitnessCenterMVC.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -20,7 +22,10 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Logging;
+using static FitnessCenterLibrary.Models.Enums;
 
 namespace FitnessCenterMVC.Areas.Identity.Pages.Account
 {
@@ -32,13 +37,14 @@ namespace FitnessCenterMVC.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<User> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
-
+        private readonly ApplicationDbContext _context;
         public RegisterModel(
             UserManager<User> userManager,
             IUserStore<User> userStore,
             SignInManager<User> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -46,6 +52,7 @@ namespace FitnessCenterMVC.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _context = context;
         }
 
         /// <summary>
@@ -111,108 +118,76 @@ namespace FitnessCenterMVC.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
+                var user = CreateUser();
 
                 if (Input.Role.Equals("Fitness center member"))
                 {
-                    var user = CreateFitnessCenterMember();
-
-                    user.Name = Input.Name;
-                    user.Surname = Input.Surname;
-                    user.PhoneNumber = Input.PhoneNumber;
-                    user.Email = Input.Email;
-                    user.UserName = Input.UserName;
-                    user.DateOfBirth = Input.DateOfBirth;
-                    user.IsActive = true;
-                    user.FirstMembership = DateTime.Now;
-
-                    //await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
-                    //await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-                    var result = await _userManager.CreateAsync(user, Input.Password);
-
-                    if (result.Succeeded)
-                    {
-                        _logger.LogInformation("User created a new account with password.");
-
-                        var userId = await _userManager.GetUserIdAsync(user);
-                        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                        var callbackUrl = Url.Page(
-                            "/Account/ConfirmEmail",
-                            pageHandler: null,
-                            values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
-                            protocol: Request.Scheme);
-
-                        await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                            $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
-                        if (_userManager.Options.SignIn.RequireConfirmedAccount)
-                        {
-                            return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
-                        }
-                        else
-                        {
-                            await _signInManager.SignInAsync(user, isPersistent: false);
-                            return LocalRedirect(returnUrl);
-                        }
-                    }
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
+                    user = CreateFitnessCenterMember();
                 }
                 else if (Input.Role.Equals("Coach"))
                 {
-                    var user = CreateCoach();
+                    user = CreateCoach();
+                }
 
-                    user.Name = Input.Name;
-                    user.Surname = Input.Surname;
-                    user.PhoneNumber = Input.PhoneNumber;
-                    user.Email = Input.Email;
-                    user.UserName = Input.UserName;
-                    user.DateOfBirth = Input.DateOfBirth;
-                    user.IsActive = false;
-                    user.Rating = 0;
+                var result = await _userManager.CreateAsync(user, Input.Password);
 
-                    //await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
-                    //await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-                    var result = await _userManager.CreateAsync(user, Input.Password);
+                if (result.Succeeded)
+                {
+                    _logger.LogInformation("User created a new account with password.");
+                    var userId = await _userManager.GetUserIdAsync(user);
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
-                    if (result.Succeeded)
+                    //Adds registered user to a certain role
+                    AddToAspNetUserRolesTable(userId);
+
+                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                    var callbackUrl = Url.Page(
+                        "/Account/ConfirmEmail",
+                        pageHandler: null,
+                        values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
+                        protocol: Request.Scheme);
+
+                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                    if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
-                        _logger.LogInformation("User created a new account with password.");
-
-                        var userId = await _userManager.GetUserIdAsync(user);
-                        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                        var callbackUrl = Url.Page(
-                            "/Account/ConfirmEmail",
-                            pageHandler: null,
-                            values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
-                            protocol: Request.Scheme);
-
-                        await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                            $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
-                        if (_userManager.Options.SignIn.RequireConfirmedAccount)
-                        {
-                            return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
-                        }
-                        else
-                        {
-                            await _signInManager.SignInAsync(user, isPersistent: false);
-                            return LocalRedirect(returnUrl);
-                        }
+                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
                     }
-                    foreach (var error in result.Errors)
+                    else
                     {
-                        ModelState.AddModelError(string.Empty, error.Description);
+                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        return LocalRedirect(returnUrl);
                     }
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
                 }
 
             }
 
             // If we got this far, something failed, redisplay form
             return Page();
+        }
+
+        //Adds registered user to a certain role
+        private void AddToAspNetUserRolesTable(string userId)
+        {
+            var r = new IdentityUserRole<string>()
+            {
+                UserId = userId,
+                RoleId = ((int)UserRole.FitnessCenterMember).ToString()
+            };
+            try
+            {
+                _context.UserRoles.Add(r);
+                _context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                _logger.LogInformation(e.Message);
+            }
         }
 
         private User CreateUser()
@@ -233,7 +208,16 @@ namespace FitnessCenterMVC.Areas.Identity.Pages.Account
         {
             try
             {
-                return Activator.CreateInstance<FitnessCenterMember>();
+                var user = Activator.CreateInstance<FitnessCenterMember>();
+                user.Name = Input.Name;
+                user.Surname = Input.Surname;
+                user.PhoneNumber = Input.PhoneNumber;
+                user.Email = Input.Email;
+                user.UserName = Input.UserName;
+                user.DateOfBirth = Input.DateOfBirth;
+                user.IsActive = true;
+                user.FirstMembership = DateTime.Now;
+                return user;
             }
             catch
             {
@@ -247,7 +231,16 @@ namespace FitnessCenterMVC.Areas.Identity.Pages.Account
         {
             try
             {
-                return Activator.CreateInstance<Coach>();
+                var user = Activator.CreateInstance<Coach>();
+                user.Name = Input.Name;
+                user.Surname = Input.Surname;
+                user.PhoneNumber = Input.PhoneNumber;
+                user.Email = Input.Email;
+                user.UserName = Input.UserName;
+                user.DateOfBirth = Input.DateOfBirth;
+                user.IsActive = false;
+                user.Rating = 0;
+                return user;
             }
             catch
             {

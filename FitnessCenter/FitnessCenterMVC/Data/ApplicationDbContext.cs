@@ -30,7 +30,9 @@ namespace FitnessCenterMVC.Data
             modelBuilder.Entity<User>()
                 .HasDiscriminator<string>("Discriminator")
                 .HasValue<FitnessCenterMember>("FitnessCenterMember")
-                .HasValue<Coach>("Coach");
+                .HasValue<Coach>("Coach")
+                .HasValue<Administrator>("Administrator");
+
         }
 
         public DbSet<Administrator> Administrator { get; set; }
