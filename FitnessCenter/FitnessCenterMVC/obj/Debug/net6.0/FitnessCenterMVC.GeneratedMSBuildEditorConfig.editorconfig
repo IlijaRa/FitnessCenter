@@ -55,6 +55,14 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRml0bmVzc0NlbnRlclxHZXRBbGxGaXRuZXNzQ2VudGVycy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/GitHubRepositories/FitnessCenter/FitnessCenter/FitnessCenterMVC/Views/Hall/AddHall.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGFsbFxBZGRIYWxsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GitHubRepositories/FitnessCenter/FitnessCenter/FitnessCenterMVC/Views/Hall/EditHall.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGFsbFxFZGl0SGFsbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/GitHubRepositories/FitnessCenter/FitnessCenter/FitnessCenterMVC/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 

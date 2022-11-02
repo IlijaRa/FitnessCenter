@@ -26,7 +26,7 @@ namespace FitnessCenterMVC.Controllers
         {
             if (!ModelState.IsValid)
             {
-                // if we get here, something is wrong
+                // if we got here, something failed
                 return View("Error");
             }
 
@@ -40,37 +40,49 @@ namespace FitnessCenterMVC.Controllers
         public async Task<IActionResult> EditFitnessCenter(int id)
         {
             var fitnessCenter = await _context.FitnessCenter.FirstOrDefaultAsync(x => x.Id == id);
-            if (fitnessCenter == null)
+            var halls = await _context.Hall.Where(x => x.FitnessCenterId == id).ToListAsync();
+            if (fitnessCenter == null || halls == null)
             {
-                // if we get here, something is wrong
+                // if we got here, something failed
                 return View("Error");
             }
 
+            EditFitnessCenterViewModel model = new EditFitnessCenterViewModel();
+            List<HallViewModel> hall_ViewModels = new List<HallViewModel>();
             var fitnessCenterViewModel = FitnessCenterConversions.ConvertToFintessCenterViewModel(fitnessCenter);
-            return View(fitnessCenterViewModel);
+            
+            foreach (var hall in halls)
+            {
+                hall_ViewModels.Add(HallConversions.ConvertToHallViewModel(hall));
+            }
+
+            model.fitnessCenter = fitnessCenterViewModel;
+            model.halls = hall_ViewModels;
+
+            return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditFitnessCenter(FitnessCenterViewModel model)
+        public async Task<IActionResult> EditFitnessCenter(EditFitnessCenterViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                // if we get here, something is wrong
+                // if we got here, something failed
                 return View("Error");
             }
 
-            var fitnessCenter = await _context.FitnessCenter.FirstOrDefaultAsync(x => x.Id == model.Id);
+            var fitnessCenter = await _context.FitnessCenter.FirstOrDefaultAsync(x => x.Id == model.fitnessCenter.Id);
 
-            fitnessCenter.Title = model.Title;
-            fitnessCenter.PhoneNumber = model.PhoneNumber;
-            fitnessCenter.EmailAddress = model.EmailAddress;
-            fitnessCenter.Street = model.Street;
-            fitnessCenter.Number = model.Number;
-            fitnessCenter.City = model.City;
-            fitnessCenter.ZipCode = model.ZipCode;
+            fitnessCenter.Title = model.fitnessCenter.Title;
+            fitnessCenter.PhoneNumber = model.fitnessCenter.PhoneNumber;
+            fitnessCenter.EmailAddress = model.fitnessCenter.EmailAddress;
+            fitnessCenter.Street = model.fitnessCenter.Street;
+            fitnessCenter.Number = model.fitnessCenter.Number;
+            fitnessCenter.City = model.fitnessCenter.City;
+            fitnessCenter.ZipCode = model.fitnessCenter.ZipCode;
 
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("EditFitnessCenter", "FitnessCenter", new { id = model.fitnessCenter.Id });
         }
 
         [HttpGet]
@@ -92,7 +104,7 @@ namespace FitnessCenterMVC.Controllers
             var fitnessCenter = await _context.FitnessCenter.FirstOrDefaultAsync(x => x.Id == id);
             if(fitnessCenter == null)
             {
-                // if we get here, something is wrong
+                // if we got here, something failed
                 return View("Error");
             }
 

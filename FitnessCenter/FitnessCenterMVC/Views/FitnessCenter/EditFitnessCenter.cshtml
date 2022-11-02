@@ -1,4 +1,4 @@
-﻿@model FitnessCenterMVC.Models.FitnessCenterViewModel
+﻿@model FitnessCenterMVC.Models.EditFitnessCenterViewModel
 @{
 }
 
@@ -11,44 +11,84 @@
             <div class="card-body">
                 <form asp-action="EditFitnessCenter">
                     <div asp-validation-summary="All" class="text-danger"></div>
+
+                    @Html.HiddenFor(m =>m.fitnessCenter.Id)
+
                     <div class="form-group">
-                        <label asp-for="Title"></label>
-                        <input asp-for="Title" class="form-control" />
-                        <span asp-validation-for="Title" class="text-danger"></span>
+                        <label asp-for="fitnessCenter.Title"></label>
+                        <input asp-for="fitnessCenter.Title" class="form-control" />
+                        <span asp-validation-for="fitnessCenter.Title" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="PhoneNumber"></label>
-                        <input asp-for="PhoneNumber" class="form-control" />
-                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        <label asp-for="fitnessCenter.PhoneNumber"></label>
+                        <input asp-for="fitnessCenter.PhoneNumber" class="form-control" />
+                        <span asp-validation-for="fitnessCenter.PhoneNumber" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="EmailAddress"></label>
-                        <input asp-for="EmailAddress" class="form-control" />
-                        <span asp-validation-for="EmailAddress" class="text-danger"></span>
+                        <label asp-for="fitnessCenter.EmailAddress"></label>
+                        <input asp-for="fitnessCenter.EmailAddress" class="form-control" />
+                        <span asp-validation-for="fitnessCenter.EmailAddress" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Street"></label>
-                        <input asp-for="Street" class="form-control" />
-                        <span asp-validation-for="Street" class="text-danger"></span>
+                        <label asp-for="fitnessCenter.Street"></label>
+                        <input asp-for="fitnessCenter.Street" class="form-control" />
+                        <span asp-validation-for="fitnessCenter.Street" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Number"></label>
-                        <input asp-for="Number" class="form-control" />
-                        <span asp-validation-for="Number" class="text-danger"></span>
+                        <label asp-for="fitnessCenter.Number"></label>
+                        <input asp-for="fitnessCenter.Number" class="form-control" />
+                        <span asp-validation-for="fitnessCenter.Number" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="City"></label>
-                        <input asp-for="City" class="form-control" />
-                        <span asp-validation-for="City" class="text-danger"></span>
+                        <label asp-for="fitnessCenter.City"></label>
+                        <input asp-for="fitnessCenter.City" class="form-control" />
+                        <span asp-validation-for="fitnessCenter.City" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="ZipCode"></label>
-                        <input asp-for="ZipCode" class="form-control" />
-                        <span asp-validation-for="ZipCode" class="text-danger"></span>
+                        <label asp-for="fitnessCenter.ZipCode"></label>
+                        <input asp-for="fitnessCenter.ZipCode" class="form-control" />
+                        <span asp-validation-for="fitnessCenter.ZipCode" class="text-danger"></span>
                     </div>
                     <input type="submit" value="Save fitness center" class="btn btn-success text-uppercase rounded-0" />
                 </form>
             </div>
         </div>
     </div>
-</div>  
+</div>
+
+<h1>List of halls</h1>
+
+<p>
+    <a asp-action="AddHall" asp-controller="Hall" asp-route-id="@Model.fitnessCenter.Id">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <p>Capacity</p>
+            </th>
+            <th>
+                <p>Hall mark</p>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.halls)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Capacity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HallMark)
+                </td>
+                <td>
+                    <a asp-action="EditHall" asp-controller="Hall" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="DeleteHall" asp-controller="Hall" asp-route-id="@item.Id"
+                   onclick="return confirm('Are you sure that you want to delete @item.HallMark hall?')">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

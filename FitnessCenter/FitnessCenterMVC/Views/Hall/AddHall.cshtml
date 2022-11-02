@@ -1,0 +1,31 @@
+﻿@model FitnessCenterMVC.Models.HallViewModel
+@{
+}
+<div class="row">
+    <div class="col-md-6 mx-auto">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h5 class="text-uppercase text-center">Create hall</h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="AddHall">
+
+                    @Html.HiddenFor(m =>m.FitnessCenterId)
+
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Capacity"></label>
+                        <input asp-for="Capacity" class="form-control" />
+                        <span asp-validation-for="Capacity" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="HallMark"></label>
+                        <input asp-for="HallMark" class="form-control" />
+                        <span asp-validation-for="HallMark" class="text-danger"></span>
+                    </div>
+                    <input type="submit" value="Create hall" class="btn btn-success text-uppercase rounded-0" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>  
