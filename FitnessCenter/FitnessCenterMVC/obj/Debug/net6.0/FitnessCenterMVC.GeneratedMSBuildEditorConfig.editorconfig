@@ -43,6 +43,18 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/GitHubRepositories/FitnessCenter/FitnessCenter/FitnessCenterMVC/Views/FitnessCenter/AddFitnessCenter.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRml0bmVzc0NlbnRlclxBZGRGaXRuZXNzQ2VudGVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GitHubRepositories/FitnessCenter/FitnessCenter/FitnessCenterMVC/Views/FitnessCenter/EditFitnessCenter.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRml0bmVzc0NlbnRlclxFZGl0Rml0bmVzc0NlbnRlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GitHubRepositories/FitnessCenter/FitnessCenter/FitnessCenterMVC/Views/FitnessCenter/GetAllFitnessCenters.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRml0bmVzc0NlbnRlclxHZXRBbGxGaXRuZXNzQ2VudGVycy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/GitHubRepositories/FitnessCenter/FitnessCenter/FitnessCenterMVC/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
