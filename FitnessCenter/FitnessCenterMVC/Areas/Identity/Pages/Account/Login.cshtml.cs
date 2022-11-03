@@ -112,10 +112,16 @@ namespace FitnessCenterMVC.Areas.Identity.Pages.Account
             {
                 var user = await _userManager.FindByNameAsync(Input.UserName);
 
-                // Checks if current user has isActive field = true, if not, than he can't login
+                if (user == null)
+                {
+                    ModelState.AddModelError(string.Empty, "Account with entered credentials doesn't exist.");
+                    return Page();
+                }
+
+                // Checks if current user has isActive = true, if not, than he can't login
                 if (!user.IsActive)
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt, because your account is set to inactive.");
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt, wait for admin to confirm your account.");
                     return Page();
                 }
 

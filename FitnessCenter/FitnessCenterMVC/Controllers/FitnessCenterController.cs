@@ -10,6 +10,7 @@ namespace FitnessCenterMVC.Controllers
     public class FitnessCenterController : Controller
     {
         private readonly ApplicationDbContext _context;
+
         public FitnessCenterController(ApplicationDbContext context)
         {
             _context = context;
@@ -33,7 +34,7 @@ namespace FitnessCenterMVC.Controllers
             var fitnessCenter = FitnessCenterConversions.ConvertToFintessCenter(model);
             await _context.FitnessCenter.AddAsync(fitnessCenter);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("GetAllFitnessCenters", "FitnessCenter");
         }
 
         [HttpGet]
@@ -48,16 +49,16 @@ namespace FitnessCenterMVC.Controllers
             }
 
             EditFitnessCenterViewModel model = new EditFitnessCenterViewModel();
-            List<HallViewModel> hall_ViewModels = new List<HallViewModel>();
+            List<HallViewModel> hallViewModels = new List<HallViewModel>();
             var fitnessCenterViewModel = FitnessCenterConversions.ConvertToFintessCenterViewModel(fitnessCenter);
             
             foreach (var hall in halls)
             {
-                hall_ViewModels.Add(HallConversions.ConvertToHallViewModel(hall));
+                hallViewModels.Add(HallConversions.ConvertToHallViewModel(hall));
             }
 
             model.fitnessCenter = fitnessCenterViewModel;
-            model.halls = hall_ViewModels;
+            model.halls = hallViewModels;
 
             return View(model);
         }
@@ -89,7 +90,10 @@ namespace FitnessCenterMVC.Controllers
         public async Task<IActionResult> GetAllFitnessCenters()
         {
             var fitnessCenterViewModels = new List<FitnessCenterViewModel>();
-            var fitnessCenters = await _context.FitnessCenter.ToListAsync();
+
+            /*fitnessCenter variable is going to have all fitness centers except "Default" fitness center
+             which is used as a default fitness center when we create coaches, and it cannot be deleted, updated etc. */
+            var fitnessCenters = await _context.FitnessCenter.Where(x => x.Title != "Default").ToListAsync();
 
             foreach (var fitnessCenter in fitnessCenters)
             {
@@ -108,6 +112,12 @@ namespace FitnessCenterMVC.Controllers
                 return View("Error");
             }
 
+            // We must delete rows from FitnessCenterHall and Hall tables too
+            var fitnessCenterHalls = await _context.FitnessCenterHall.Where(x => x.FitnessCenterId == id).ToListAsync();
+            var halls = await _context.Hall.Where(x => x.FitnessCenterId == id).ToListAsync();
+            
+            _context.FitnessCenterHall.RemoveRange(fitnessCenterHalls);
+            _context.Hall.RemoveRange(halls);
             _context.FitnessCenter.Remove(fitnessCenter);
             await _context.SaveChangesAsync();
             return RedirectToAction("GetAllFitnessCenters", "FitnessCenter");

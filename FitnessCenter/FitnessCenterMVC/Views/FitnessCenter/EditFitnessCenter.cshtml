@@ -86,7 +86,7 @@
                     <a asp-action="EditHall" asp-controller="Hall" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="" asp-route-id="@item.Id">Details</a> |
                     <a asp-action="DeleteHall" asp-controller="Hall" asp-route-id="@item.Id"
-                   onclick="return confirm('Are you sure that you want to delete @item.HallMark hall?')">Delete</a>
+                   onclick="return confirm('Are you sure that you want to delete hall @item.HallMark ?')">Delete</a>
                 </td>
             </tr>
         }
