@@ -63,7 +63,7 @@
                     <a asp-action="EditFitnessCenter" asp-controller="FitnessCenter" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                     <a asp-action="DeleteFitnessCenter" asp-controller="FitnessCenter" asp-route-id="@item.Id"
-                   onclick="return confirm('Are you sure that you want to delete @item.Title fitness center?')">Delete</a>
+                   onclick="return confirm('Are you sure that you want to delete fitness center @item.Title ?')">Delete</a>
                 </td>
             </tr>
         }

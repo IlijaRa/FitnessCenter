@@ -9,14 +9,9 @@ namespace FitnessCenterLibrary.Models
 {
     public class Term
     {
-        [DataType(DataType.Currency)]
-        [Required(ErrorMessage = "You need to provide a price.")]
-        public double Price { get; set; }
 
-
-        [Display(Name = "Number of members")]
-        [Required(ErrorMessage = "You need to provide a number of members.")]
-        public int NumberOfMembers { get; set; }
+        [Display(Name = "Free space")]
+        public int FreeSpace { get; set; }
 
         //navigation properties
         //composite key

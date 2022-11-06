@@ -1,0 +1,65 @@
+﻿@model IEnumerable<FitnessCenterMVC.Models.WorkoutViewModel>
+@{
+}
+
+<h1>List of workouts</h1>
+
+<p>
+    <a asp-action="AddWorkout" asp-controller="Workout">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Capacity)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Capacity)
+                </td>
+                <td>
+                    <a asp-action="EditWorkout" asp-controller="Workout" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="DeleteWorkout" asp-controller="Workout" asp-route-id="@item.Id"
+                   onclick="return confirm('Are you sure that you want to delete workout @item.Title ?')">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

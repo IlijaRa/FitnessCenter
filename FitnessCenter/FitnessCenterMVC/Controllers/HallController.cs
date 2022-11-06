@@ -28,6 +28,12 @@ namespace FitnessCenterMVC.Controllers
         [HttpPost]
         public async Task<IActionResult> AddHall(HallViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                // if we got here, something failed
+                return View("Error");
+            }
+
             var hall = HallConversions.ConvertToHall(model);
             
             await _context.Hall.AddAsync(hall);
@@ -90,6 +96,7 @@ namespace FitnessCenterMVC.Controllers
                 return View("Error");
             }
 
+            // At the same time, we are deleting connected tuples in FitnessCenterHall table
             var fitnessCenterHall = new FitnessCenterHall();
             fitnessCenterHall.HallId = hall.Id;
             fitnessCenterHall.FitnessCenterId = hall.FitnessCenterId;

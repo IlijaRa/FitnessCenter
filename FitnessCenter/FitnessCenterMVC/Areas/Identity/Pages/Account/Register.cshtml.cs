@@ -88,7 +88,7 @@ namespace FitnessCenterMVC.Areas.Identity.Pages.Account
             [Required(ErrorMessage = "You need to provide role.")]
             [BindProperty]
             public string Role { get; set; }
-            public string[] Roles = new[] {"Fitness center member", "Coach"};
+            public string[] Roles = new[] {"Fitness center member", "Coach", "Administrator"};
 
             [Required(ErrorMessage = "You need to provide password.")]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
@@ -127,6 +127,10 @@ namespace FitnessCenterMVC.Areas.Identity.Pages.Account
                 else if (Input.Role.Equals("Coach"))
                 {
                     user = CreateCoach();
+                }
+                else
+                {
+                    user = CreateAdministrator();
                 }
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
@@ -174,13 +178,26 @@ namespace FitnessCenterMVC.Areas.Identity.Pages.Account
         //Adds registered user to a certain role
         private void AddToAspNetUserRolesTable(string userId)
         {
-            var r = new IdentityUserRole<string>()
-            {
-                UserId = userId,
-                RoleId = ((int)UserRole.FitnessCenterMember).ToString()
-            };
             try
             {
+                var r = new IdentityUserRole<string>()
+                {
+                    UserId = userId
+                };
+
+                if (Input.Role.Equals("Fitness center member"))
+                {
+                    r.RoleId = ((int)UserRole.FitnessCenterMember).ToString();
+                }
+                else if(Input.Role.Equals("Coach"))
+                {
+                    r.RoleId = ((int)UserRole.Coach).ToString();
+                }
+                else
+                {
+                    r.RoleId = ((int)UserRole.Administrator).ToString();
+                }
+            
                 _context.UserRoles.Add(r);
                 _context.SaveChanges();
             }
@@ -238,14 +255,47 @@ namespace FitnessCenterMVC.Areas.Identity.Pages.Account
                 user.Email = Input.Email;
                 user.UserName = Input.UserName;
                 user.DateOfBirth = Input.DateOfBirth;
-                user.IsActive = false;
                 user.Rating = 0;
+                user.FitnessCenterId = _context.FitnessCenter.FirstOrDefault(x => x.Title.Equals("Default")).Id;
+
+                if (User.IsInRole("Administrator"))
+                {
+                    user.IsActive = true;
+                }
+                else
+                {
+                    user.IsActive = false;
+                }
                 return user;
             }
             catch
             {
                 throw new InvalidOperationException($"Can't create an instance of '{nameof(Coach)}'. " +
                     $"Ensure that '{nameof(Coach)}' is not an abstract class and has a parameterless constructor, or alternatively " +
+                    $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
+            }
+        }
+
+        private Administrator CreateAdministrator()
+        {
+            try
+            {
+                var user = Activator.CreateInstance<Administrator>();
+                user.Name = Input.Name;
+                user.Surname = Input.Surname;
+                user.PhoneNumber = Input.PhoneNumber;
+                user.Email = Input.Email;
+                user.UserName = Input.UserName;
+                user.DateOfBirth = Input.DateOfBirth;
+                user.IsActive = true;
+                user.EmploymentDay = DateTime.Now;
+
+                return user;
+            }
+            catch
+            {
+                throw new InvalidOperationException($"Can't create an instance of '{nameof(Administrator)}'. " +
+                    $"Ensure that '{nameof(Administrator)}' is not an abstract class and has a parameterless constructor, or alternatively " +
                     $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
             }
         }

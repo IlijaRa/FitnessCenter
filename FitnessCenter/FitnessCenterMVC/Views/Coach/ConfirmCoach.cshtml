@@ -1,0 +1,59 @@
+﻿@model FitnessCenterMVC.Models.CoachViewModel
+@{
+}
+<div class="row">
+    <div class="col-md-6 mx-auto">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h5 class="text-uppercase text-center">Confirm application for coach role</h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="ConfirmCoach">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+
+                    @Html.HiddenFor(m =>m.Id)
+                    @Html.HiddenFor(m =>m.FitnessCenterId)
+
+                    <div class="form-group">
+                        <label asp-for="UserName"></label>
+                        <input asp-for="UserName" class="form-control" readonly="true"/>
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Name"></label>
+                        <input asp-for="Name" class="form-control" readonly="true" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Surname"></label>
+                        <input asp-for="Surname" class="form-control" readonly="true" />
+                        <span asp-validation-for="Surname" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="PhoneNumber"></label>
+                        <input asp-for="PhoneNumber" class="form-control" readonly="true" />
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Email"></label>
+                        <input asp-for="Email" class="form-control" readonly="true" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="DateOfBirth"></label>
+                        <input asp-for="DateOfBirth" class="form-control" readonly="true"/>
+                        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="IsActive"></label>
+                        <input asp-for="IsActive" type="radio" value="true" checked="checked"/>
+                        @*<span asp-validation-for="IsActive" class="text-danger"></span>*@
+                    </div>
+                    
+                    <input type="submit" value="Confirm coach" class="btn btn-success text-uppercase rounded-0" />
+                    //Below this comment is going to be set of all fitness centers and admin can choose in which fitness center choach is gonna go.
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

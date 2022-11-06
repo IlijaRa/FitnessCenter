@@ -11,18 +11,8 @@ namespace FitnessCenterLibrary.Models
     public class Administrator : User
     {
         [DataType(DataType.DateTime)]
-        [Required]
+        [Required(ErrorMessage = "You need to provide an employment day.")]
         public DateTime EmploymentDay { get; set; }
 
-
-        public int YearsOfExperience { 
-            get { return DateTime.Now.Year - EmploymentDay.Year; }
-            set { }
-        }
-
-        //navigation properties
-        //[Key]
-        //public int UserId { get; set; }
-        //public User User { get; set; }
     }
 }

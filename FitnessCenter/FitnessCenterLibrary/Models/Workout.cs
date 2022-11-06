@@ -39,6 +39,15 @@ namespace FitnessCenterLibrary.Models
         [Required(ErrorMessage = "You need to provide end time")]
         public DateTime EndTime { get; set; }
 
+
+        [DataType(DataType.Currency)]
+        [Required(ErrorMessage = "You need to provide a price.")]
+        public double Price { get; set; }
+
+
+        [Required(ErrorMessage = "You need to provide a capacity.")]
+        public int Capacity { get; set; }
+
         //navigation properties
         public ICollection<FitnessMemberWorkout> FitnessMemberWorkouts { get; set; }
         public string CoachId { get; set; } //string because IdentityUser id is string type
