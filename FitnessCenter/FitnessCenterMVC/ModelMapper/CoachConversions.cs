@@ -9,7 +9,7 @@ namespace FitnessCenterMVC.ModelMapper
         {
             var coach = new Coach();
 
-            //coach.Id = model.Id;
+            //coach.Id = model.Id; <-- Id is generated in a database
             coach.UserName = model.UserName;
             coach.Name = model.Name;
             coach.Surname = model.Surname;

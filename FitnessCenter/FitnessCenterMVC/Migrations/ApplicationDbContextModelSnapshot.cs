@@ -65,7 +65,7 @@ namespace FitnessCenterMVC.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FitnessCenter", (string)null);
+                    b.ToTable("FitnessCenter");
                 });
 
             modelBuilder.Entity("FitnessCenterLibrary.Models.FitnessCenterHall", b =>
@@ -83,7 +83,7 @@ namespace FitnessCenterMVC.Migrations
                     b.HasIndex("HallId")
                         .IsUnique();
 
-                    b.ToTable("FitnessCenterHall", (string)null);
+                    b.ToTable("FitnessCenterHall");
                 });
 
             modelBuilder.Entity("FitnessCenterLibrary.Models.FitnessMemberWorkout", b =>
@@ -104,7 +104,7 @@ namespace FitnessCenterMVC.Migrations
 
                     b.HasIndex("WorkoutId");
 
-                    b.ToTable("FitnessMemberWorkout", (string)null);
+                    b.ToTable("FitnessMemberWorkout");
                 });
 
             modelBuilder.Entity("FitnessCenterLibrary.Models.Hall", b =>
@@ -130,7 +130,7 @@ namespace FitnessCenterMVC.Migrations
 
                     b.HasIndex("FitnessCenterId");
 
-                    b.ToTable("Hall", (string)null);
+                    b.ToTable("Hall");
                 });
 
             modelBuilder.Entity("FitnessCenterLibrary.Models.Schedule", b =>
@@ -160,7 +160,7 @@ namespace FitnessCenterMVC.Migrations
 
                     b.HasIndex("TermCoachId", "TermWorkoutId");
 
-                    b.ToTable("Schedule", (string)null);
+                    b.ToTable("Schedule");
                 });
 
             modelBuilder.Entity("FitnessCenterLibrary.Models.Term", b =>
@@ -171,18 +171,15 @@ namespace FitnessCenterMVC.Migrations
                     b.Property<int>("WorkoutId")
                         .HasColumnType("int");
 
-                    b.Property<int>("NumberOfMembers")
+                    b.Property<int>("FreeSpace")
                         .HasColumnType("int");
-
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
 
                     b.HasKey("CoachId", "WorkoutId");
 
                     b.HasIndex("WorkoutId")
                         .IsUnique();
 
-                    b.ToTable("Term", (string)null);
+                    b.ToTable("Term");
                 });
 
             modelBuilder.Entity("FitnessCenterLibrary.Models.User", b =>
@@ -280,6 +277,9 @@ namespace FitnessCenterMVC.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("Capacity")
+                        .HasColumnType("int");
+
                     b.Property<string>("CoachId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -291,6 +291,9 @@ namespace FitnessCenterMVC.Migrations
 
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
 
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
@@ -307,7 +310,7 @@ namespace FitnessCenterMVC.Migrations
 
                     b.HasIndex("CoachId");
 
-                    b.ToTable("Workout", (string)null);
+                    b.ToTable("Workout");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

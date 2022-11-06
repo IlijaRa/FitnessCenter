@@ -112,7 +112,7 @@ namespace FitnessCenterMVC.Controllers
                 return View("Error");
             }
 
-            // We must delete rows from FitnessCenterHall and Hall tables too
+            // We must delete rows from FitnessCenterHall and Hall tables as well
             var fitnessCenterHalls = await _context.FitnessCenterHall.Where(x => x.FitnessCenterId == id).ToListAsync();
             var halls = await _context.Hall.Where(x => x.FitnessCenterId == id).ToListAsync();
             

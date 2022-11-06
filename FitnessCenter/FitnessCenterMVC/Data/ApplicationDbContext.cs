@@ -1,5 +1,6 @@
 ﻿using FitnessCenterLibrary.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.Contracts;
 using System.Text.RegularExpressions;
