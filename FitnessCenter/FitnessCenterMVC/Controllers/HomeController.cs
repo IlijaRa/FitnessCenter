@@ -23,10 +23,10 @@ namespace FitnessCenterMVC.Controllers
         public async Task<IActionResult> Index()
         {
             var workouts = await _context.Workout.ToListAsync();
-            var workoutViewModels = new List<WorkoutViewModel>();
+            var workoutViewModels = new List<WorkoutIndexViewModel>();
             foreach (var workout in workouts)
             {
-                workoutViewModels.Add(WorkoutConversions.ConvertToWorkoutViewModel(workout));
+                workoutViewModels.Add(WorkoutConversions.ConvertToWorkoutIndexViewModel(workout));
             }
 
             return View(workoutViewModels);

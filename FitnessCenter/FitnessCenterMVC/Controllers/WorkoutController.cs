@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Data;
 using System.Transactions;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
@@ -197,7 +198,7 @@ namespace FitnessCenterMVC.Controllers
             var workouts = await _context.Workout.ToListAsync();
             var found_workouts = new List<WorkoutViewModel>();
             searching = searching.ToLower();
-
+            
             foreach (var workout in workouts)
             {
                 if (HasSimilarities(workout, searching))
@@ -209,44 +210,70 @@ namespace FitnessCenterMVC.Controllers
             return View(found_workouts);
         }
 
+        //Function shows if workout has similar values which user searched
         private bool HasSimilarities(Workout workout, string searching)
         {
-            int price;
-            DateTime date;
-            bool isCorrect = false;
+            double value;
+            bool hasSimilarity = false;
 
-            if (workout.Title.ToLower().Contains(searching))
+            if (workout.Title.ToLower().Contains(searching))  hasSimilarity = true;
+
+            else if (workout.Type.ToString().ToLower().Contains(searching)) hasSimilarity = true;
+            
+            else if (workout.Description.ToLower().Contains(searching)) hasSimilarity = true;
+            
+            else if (double.TryParse(searching, out value))
             {
-                isCorrect = true;
-            }
-            else if (workout.Type.ToString().ToLower().Contains(searching))
-            {
-                isCorrect = true;
-            }
-            else if (workout.Description.ToLower().Contains(searching))
-            {
-                isCorrect = true;
-            }
-            else if (int.TryParse(searching, out price))
-            {
-                if (workout.Price == price)
-                {
-                    isCorrect = true;
-                }
-            }
-            else if(DateTime.TryParse(searching, out date))
-            {
-                if(DateTime.Equals(workout.StartTime.Date, date.Date))
-                {
-                    isCorrect = true;
-                }
-                else if (DateTime.Equals(workout.EndTime.Date, date.Date))
-                {
-                    isCorrect = true;
-                }
+                if (workout.Price == value || (workout.EndTime - workout.StartTime).TotalHours == value || workout.Capacity == value) hasSimilarity = true;
             }
 
-            return isCorrect;
+            else if(SearchCombined(workout, searching)) hasSimilarity = true;
+
+            return hasSimilarity;
+        }
+
+        private bool SearchCombined(Workout workout, string searching)
+        {
+            bool hasSimilarity = false;
+            string[] searching_elements = SplitString(searching);
+            string combined_string = CombinedString(workout);
+
+            foreach (var element in searching_elements)
+            {
+                if (combined_string.Contains(element))
+                {
+                    hasSimilarity = true;
+                    break;
+                }
+            }
+            return hasSimilarity;
+        }
+
+        private string[] SplitString(string searching)
+        {
+            string[] searching_elements = searching.Split(' '); // splits an array on places where " " is found
+            searching_elements = searching_elements.Where(w => w != "").ToArray(); // excludes from array all elements that are " "
+
+            return searching_elements;
+        }
+
+        private string CombinedString(Workout workout)
+        {
+            // Group all values to one string
+            string combined_string = workout.Title +
+                                            workout.Type.ToString() +
+                                            workout.Description +
+                                            (workout.EndTime - workout.StartTime).TotalHours.ToString() +
+                                            workout.Price.ToString() +
+                                            workout.Capacity.ToString();
+
+            // deletes all whitespaces from a string
+            combined_string = new string(combined_string.ToLower()
+                                                        .ToCharArray()
+                                                        .Where(c => !Char.IsWhiteSpace(c))
+                                                        .ToArray());
+
+            return combined_string;
         }
     }
 }

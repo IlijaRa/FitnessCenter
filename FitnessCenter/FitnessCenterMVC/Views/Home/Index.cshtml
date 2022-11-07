@@ -1,5 +1,12 @@
-﻿@model IEnumerable<FitnessCenterMVC.Models.WorkoutViewModel>
+﻿@model IEnumerable<FitnessCenterMVC.Models.WorkoutIndexViewModel>
 @{
+    List<string> items = new List<string>();
+    items.Add("Title");
+    items.Add("Type");
+    items.Add("Description");
+    items.Add("Price");
+    items.Add("Duration");
+    SelectList criteria = new SelectList(items);
 }
 
 <h1>Search for workouts</h1>
@@ -10,17 +17,7 @@
                     <div class="search">
                         <i class="fa fa-search"></i>
                         <input id="searching" name="searching" type="text" class="form-control" placeholder="Fill in...">
-                        <button class="btn btn-primary" type="submit" >Search</button
-                    </div>
-                </div>
-            </div>
-        </form>
-        <form asp-action="SearchWorkout" asp-controller="Workout" method="get">
-            <div class="row d-flex justify-content-center align-items-center">
-                <div class="col-md-6">
-                    <div class="search">
-                        <i class="fa fa-search"></i>
-                        <input id="searching" name="searching" type="date" class="form-control">
+                        @*@Html.DropDownListFor(model => model.SearchCriteria, criteria)*@
                         <button class="btn btn-primary" type="submit" >Search</button
                     </div>
                 </div>

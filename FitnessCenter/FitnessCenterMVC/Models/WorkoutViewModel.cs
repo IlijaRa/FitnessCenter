@@ -49,5 +49,11 @@ namespace FitnessCenterMVC.Models
 
         [Required(ErrorMessage = "You need to provide a capacity.")]
         public int Capacity { get; set; }
+
+    }
+
+    public class WorkoutIndexViewModel : WorkoutViewModel
+    {
+        public string SearchCriteria { get; set; }
     }
 }

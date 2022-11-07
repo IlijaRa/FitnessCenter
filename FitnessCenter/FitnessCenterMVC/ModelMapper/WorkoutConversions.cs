@@ -62,5 +62,34 @@ namespace FitnessCenterMVC.ModelMapper
 
             return workoutViewModel;
         }
+
+        public static WorkoutIndexViewModel ConvertToWorkoutIndexViewModel(Workout model)
+        {
+            var workoutViewModel = new WorkoutIndexViewModel();
+
+            workoutViewModel.Id = model.Id;
+            workoutViewModel.Title = model.Title;
+            workoutViewModel.Description = model.Description;
+            workoutViewModel.StartTime = model.StartTime;
+            workoutViewModel.EndTime = model.EndTime;
+            workoutViewModel.Price = model.Price;
+            workoutViewModel.Capacity = model.Capacity;
+            workoutViewModel.CoachId = model.CoachId;
+            workoutViewModel.SearchCriteria = "";
+            if (model.Type == Enums.WorkoutType.Conditional)
+            {
+                workoutViewModel.Type = Enums.WorkoutType.Conditional.ToString();
+            }
+            else if (model.Type == Enums.WorkoutType.PowerLifting)
+            {
+                workoutViewModel.Type = Enums.WorkoutType.PowerLifting.ToString();
+            }
+            else if (model.Type == Enums.WorkoutType.Bodybuilding)
+            {
+                workoutViewModel.Type = Enums.WorkoutType.Bodybuilding.ToString();
+            }
+
+            return workoutViewModel;
+        }
     }
 }
