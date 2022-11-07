@@ -4,7 +4,9 @@ using FitnessCenterMVC.ModelMapper;
 using FitnessCenterMVC.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using System.Data;
 using System.Transactions;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
@@ -102,15 +104,15 @@ namespace FitnessCenterMVC.Controllers
                     workout.Capacity = model.Capacity;
                     workout.CoachId = model.CoachId;
 
-                    if (model.Type.Equals("Conditional"))
+                    if (model.Type == Enums.WorkoutType.Conditional.ToString())
                     {
                         workout.Type = Enums.WorkoutType.Conditional;
                     }
-                    else if (model.Type.Equals("PowerLifting"))
+                    else if (model.Type == Enums.WorkoutType.PowerLifting.ToString())
                     {
                         workout.Type = Enums.WorkoutType.PowerLifting;
                     }
-                    else
+                    else if (model.Type == Enums.WorkoutType.Bodybuilding.ToString())
                     {
                         workout.Type = Enums.WorkoutType.Bodybuilding;
                     }
@@ -140,7 +142,7 @@ namespace FitnessCenterMVC.Controllers
             if(coach == null)
             {
                 // if we got here, something failed
-                ViewData["ErrorMessage"] = "You are not logged in!";
+                ViewData["ErrorMessage"] = "You are not logged in as coach!";
                 return View("Error");
             }
 
@@ -183,6 +185,68 @@ namespace FitnessCenterMVC.Controllers
             }
 
             return RedirectToAction("GetAllWorkouts", "Workout");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> SearchWorkout(string searching)
+        {
+            if (searching.Equals("") || String.IsNullOrEmpty(searching))
+            {
+                return View();
+            }
+            var workouts = await _context.Workout.ToListAsync();
+            var found_workouts = new List<WorkoutViewModel>();
+            searching = searching.ToLower();
+
+            foreach (var workout in workouts)
+            {
+                if (HasSimilarities(workout, searching))
+                {
+                    found_workouts.Add(WorkoutConversions.ConvertToWorkoutViewModel(workout));
+                }
+            }
+
+            return View(found_workouts);
+        }
+
+        private bool HasSimilarities(Workout workout, string searching)
+        {
+            int price;
+            DateTime date;
+            bool isCorrect = false;
+
+            if (workout.Title.ToLower().Contains(searching))
+            {
+                isCorrect = true;
+            }
+            else if (workout.Type.ToString().ToLower().Contains(searching))
+            {
+                isCorrect = true;
+            }
+            else if (workout.Description.ToLower().Contains(searching))
+            {
+                isCorrect = true;
+            }
+            else if (int.TryParse(searching, out price))
+            {
+                if (workout.Price == price)
+                {
+                    isCorrect = true;
+                }
+            }
+            else if(DateTime.TryParse(searching, out date))
+            {
+                if(DateTime.Equals(workout.StartTime.Date, date.Date))
+                {
+                    isCorrect = true;
+                }
+                else if (DateTime.Equals(workout.EndTime.Date, date.Date))
+                {
+                    isCorrect = true;
+                }
+            }
+
+            return isCorrect;
         }
     }
 }
