@@ -5,6 +5,7 @@ using FitnessCenterMVC.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 
 namespace FitnessCenterMVC.Controllers
@@ -20,13 +21,18 @@ namespace FitnessCenterMVC.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortCriteria = "")
         {
             var workouts = await _context.Workout.ToListAsync();
-            var workoutViewModels = new List<WorkoutIndexViewModel>();
+            var workoutViewModels = new List<WorkoutViewModel>();
+
             foreach (var workout in workouts)
             {
-                workoutViewModels.Add(WorkoutConversions.ConvertToWorkoutIndexViewModel(workout));
+                workoutViewModels.Add(WorkoutConversions.ConvertToWorkoutViewModel(workout));
+            }
+            if (sortCriteria.Equals("price"))
+            {
+                workoutViewModels.Sort();
             }
 
             return View(workoutViewModels);

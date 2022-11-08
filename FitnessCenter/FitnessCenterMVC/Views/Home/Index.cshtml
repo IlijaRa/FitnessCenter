@@ -1,4 +1,4 @@
-﻿@model IEnumerable<FitnessCenterMVC.Models.WorkoutIndexViewModel>
+﻿@model IEnumerable<FitnessCenterMVC.Models.WorkoutViewModel>
 @{
     List<string> items = new List<string>();
     items.Add("Title");
@@ -17,7 +17,6 @@
                     <div class="search">
                         <i class="fa fa-search"></i>
                         <input id="searching" name="searching" type="text" class="form-control" placeholder="Fill in...">
-                        @*@Html.DropDownListFor(model => model.SearchCriteria, criteria)*@
                         <button class="btn btn-primary" type="submit" >Search</button
                     </div>
                 </div>
@@ -43,7 +42,7 @@
                 @Html.DisplayNameFor(model => model.EndTime)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Price)
+                <a asp-action="Index" asp-controller="Home" asp-route-sortCriteria="price">Price($)</a>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Capacity)
