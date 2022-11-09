@@ -51,10 +51,10 @@ namespace FitnessCenterMVC.Controllers
             EditFitnessCenterViewModel model = new EditFitnessCenterViewModel();
             List<HallViewModel> hallViewModels = new List<HallViewModel>();
             var fitnessCenterViewModel = FitnessCenterConversions.ConvertToFintessCenterViewModel(fitnessCenter);
-            
+
             foreach (var hall in halls)
             {
-                hallViewModels.Add(HallConversions.ConvertToHallViewModel(hall));
+            hallViewModels.Add(HallConversions.ConvertToHallViewModel(hall));
             }
 
             model.fitnessCenter = fitnessCenterViewModel;
@@ -105,8 +105,9 @@ namespace FitnessCenterMVC.Controllers
         [HttpGet]
         public async Task<IActionResult> DeleteFitnessCenter(int id)
         {
+            
             var fitnessCenter = await _context.FitnessCenter.FirstOrDefaultAsync(x => x.Id == id);
-            if(fitnessCenter == null)
+            if (fitnessCenter == null)
             {
                 // if we got here, something failed
                 return View("Error");
@@ -115,7 +116,7 @@ namespace FitnessCenterMVC.Controllers
             // We must delete rows from FitnessCenterHall and Hall tables as well
             var fitnessCenterHalls = await _context.FitnessCenterHall.Where(x => x.FitnessCenterId == id).ToListAsync();
             var halls = await _context.Hall.Where(x => x.FitnessCenterId == id).ToListAsync();
-            
+
             _context.FitnessCenterHall.RemoveRange(fitnessCenterHalls);
             _context.Hall.RemoveRange(halls);
             _context.FitnessCenter.Remove(fitnessCenter);

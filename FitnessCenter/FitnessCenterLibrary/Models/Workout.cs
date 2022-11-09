@@ -50,7 +50,7 @@ namespace FitnessCenterLibrary.Models
 
         //navigation properties
         public ICollection<FitnessMemberWorkout> FitnessMemberWorkouts { get; set; }
-        public string CoachId { get; set; } //string because IdentityUser id is string type
+        public string CoachId { get; set; } // string because IdentityUser id is string type
         public Coach Coach { get; set; }
         public Term Term { get; set; }
     }

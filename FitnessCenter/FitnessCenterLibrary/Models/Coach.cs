@@ -14,9 +14,6 @@ namespace FitnessCenterLibrary.Models
         public double Rating { get; set; }
 
         //navigation properties
-        //[Key]
-        //public int UserId { get; set; }
-        //public User User { get; set; }
         public int FitnessCenterId { get; set; }
         public FitnessCenter FitnessCenter { get; set; }
         public ICollection<Workout>? Workouts { get; set; } //TODO: Check whether ? makes property nullable

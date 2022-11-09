@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -10,7 +11,6 @@ namespace FitnessCenterLibrary.Models
     public class Schedule
     {
         //navigation properties
-        //composite key
         public int FitnessCenterHallId { get; set; }
         public FitnessCenterHall FitnessCenterHall { get; set; }
         public int TermId { get; set; }

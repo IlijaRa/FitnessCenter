@@ -75,6 +75,12 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Capacity)
                 </td>
+                @if (User.IsInRole("FitnessCenterMember"))
+                {
+                    <td>
+                        <a asp-action="EnrollInWorkout" asp-controller="Workout" asp-route-id="@item.Id">Enroll in</a>
+                    </td>
+                }
             </tr>
         }
     </tbody>

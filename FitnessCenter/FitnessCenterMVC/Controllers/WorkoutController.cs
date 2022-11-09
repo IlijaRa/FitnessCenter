@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Data;
+using System.Linq;
 using System.Transactions;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
@@ -186,6 +187,70 @@ namespace FitnessCenterMVC.Controllers
             }
 
             return RedirectToAction("GetAllWorkouts", "Workout");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EnrollInWorkout(int id)
+        {
+            var term = _context.Term.FirstOrDefault(x => x.WorkoutId == id);
+            var workout = _context.Workout.FirstOrDefault(x => x.Id == id);
+
+            if (term == null || workout == null)
+            {
+                ViewData["ErrorMessage"] = "Request couldn't be executed!";
+                return View("Error");
+            }
+            var workoutViewModel = WorkoutConversions.ConvertToWorkoutViewModel(workout);
+
+            // We are putting freespace value into capacity, because maybe someone have enrolled in workout already
+            workoutViewModel.Capacity = term.FreeSpace; 
+
+            return View(workoutViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EnrollInWorkout(WorkoutViewModel model)
+        {
+
+            if (model.Capacity < 1)
+            {
+                ViewData["ErrorMessage"] = "There is no space for more enrollments!";
+                return View("Error");
+            }
+
+            try
+            {
+                var member = await _context.FitnessCenterMember.FirstOrDefaultAsync(x => x.UserName == User.Identity.Name);
+                
+                var checkfitnessMemberWorkout = await _context.FitnessMemberWorkout.Where(x => x.FitnessCenterMemberId == member.Id && x.WorkoutId == model.Id).FirstOrDefaultAsync();
+
+                if (checkfitnessMemberWorkout != null)
+                {
+                    ViewData["ErrorMessage"] = "You already reserved this term!";
+                    return View("Error");
+                }
+
+                var fitnessMemberWorkout = new FitnessMemberWorkout()
+                {
+                    FitnessCenterMemberId = member.Id,
+                    WorkoutId = model.Id,
+                    State = Enums.WorkoutState.NonCompleted,
+                    Rate = 0
+                };
+                await _context.FitnessMemberWorkout.AddAsync(fitnessMemberWorkout);
+                await _context.SaveChangesAsync();
+
+                var term = _context.Term.FirstOrDefault(x => x.CoachId == model.CoachId && x.WorkoutId == model.Id);
+                term.FreeSpace--;
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index", "Home");
+            }
+            catch (Exception e)
+            {
+                ViewData["ErrorMessage"] = e.Message;
+                return View("Error");
+            }
+            
         }
 
         [HttpGet]

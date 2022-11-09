@@ -35,14 +35,14 @@ namespace FitnessCenterMVC.Controllers
             }
 
             var hall = HallConversions.ConvertToHall(model);
-            
+
             await _context.Hall.AddAsync(hall);
             await _context.SaveChangesAsync();
 
             // We can easily populate table FitnessCenterHall with available HallId and FitnessCenterId
             // We haven't known halls id until now, because id is generated in the database.
             var hall_with_id = _context.Hall.FirstOrDefault(x => (x.HallMark == model.HallMark) && (x.FitnessCenterId == model.FitnessCenterId));
-            
+
             if (hall_with_id == null)
             {
                 // if we got here, something failed

@@ -1,0 +1,56 @@
+﻿@model FitnessCenterMVC.Models.WorkoutViewModel
+@{
+}
+<div class="row">
+    <div class="col-md-6 mx-auto">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h5 class="text-uppercase text-center">Enroll in workout</h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="EnrollInWorkout" method="post">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+
+                    @Html.HiddenFor(m =>m.CoachId)
+
+                    <div class="form-group">
+                        <label asp-for="Title"></label>
+                        <input asp-for="Title" class="form-control" readonly="readonly"/>
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Description"></label>
+                        <input asp-for="Description" class="form-control" readonly="readonly" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Type"></label>
+                        <input asp-for="Type" class="form-control" readonly="readonly" />
+                        <span asp-validation-for="Type" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="StartTime"></label>
+                        <input asp-for="StartTime" class="form-control" readonly="readonly" />
+                        <span asp-validation-for="StartTime" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="EndTime"></label>
+                        <input asp-for="EndTime" class="form-control" readonly="readonly" />
+                        <span asp-validation-for="EndTime" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Price"></label>
+                        <input asp-for="Price" class="form-control" readonly="readonly" />
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Free space</label>
+                        <input asp-for="Capacity" class="form-control" readonly="readonly" />
+                        <span asp-validation-for="Capacity" class="text-danger"></span>
+                    </div>
+                    <input type="submit" value="Enroll" class="btn btn-success text-uppercase rounded-0" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>  
