@@ -14,17 +14,14 @@ namespace FitnessCenterLibrary.Models
         [Required]
         public Enums.WorkoutState State { get; set; }
 
-
         public double Rate { get; set; }
 
         //navigation properties
-        //composite key
-        public string FitnessCenterMemberId { get; set; } //string because IdentityUser id is string type
+        public string FitnessCenterMemberId { get; set; } // string because IdentityUser id is string type
         public FitnessCenterMember FitnessCenterMember { get; set; }
-       
         public int WorkoutId { get; set; }
         public Workout Workout { get; set; }
 
-        
+
     }
 }

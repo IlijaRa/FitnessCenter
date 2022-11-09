@@ -1,8 +1,87 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<FitnessCenterMVC.Models.WorkoutViewModel>
+@{
+    List<string> items = new List<string>();
+    items.Add("Title");
+    items.Add("Type");
+    items.Add("Description");
+    items.Add("Price");
+    items.Add("Duration");
+    SelectList criteria = new SelectList(items);
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<h1>Search for workouts</h1>
+    <div class="container">
+        <form asp-action="SearchWorkout" asp-controller="Workout" method="get">
+            <div class="row d-flex justify-content-center align-items-center">
+                <div class="col-md-6">
+                    <div class="search">
+                        <i class="fa fa-search"></i>
+                        <input id="searching" name="searching" type="text" class="form-control" placeholder="Fill in...">
+                        <button class="btn btn-primary" type="submit" >Search</button
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndTime)
+            </th>
+            <th>
+                <a asp-action="Index" asp-controller="Home" asp-route-sortCriteria="price">Price($)</a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Capacity)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Capacity)
+                </td>
+                @if (User.IsInRole("FitnessCenterMember"))
+                {
+                    <td>
+                        <a asp-action="EnrollInWorkout" asp-controller="Workout" asp-route-id="@item.Id">Enroll in</a>
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

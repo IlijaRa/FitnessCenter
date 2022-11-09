@@ -9,10 +9,8 @@ namespace FitnessCenterLibrary.Models
     public class FitnessCenterHall
     {
         //navigation properties
-        //composite key
         public int HallId { get; set; }
         public Hall Hall { get; set; }
-
         public int FitnessCenterId { get; set; }
         public FitnessCenter FitnessCenter { get; set; }
         public ICollection<Schedule> Schedules { get; set; }

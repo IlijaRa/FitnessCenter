@@ -16,9 +16,6 @@ namespace FitnessCenterLibrary.Models
         public DateTime FirstMembership { get; set; }
 
         //navigation properties
-        //[Key]
-        //public int UserId { get; set; }
-        //public User User { get; set; }
         public ICollection<FitnessMemberWorkout> FitnessMemberWorkouts { get; set; }
     }
 }

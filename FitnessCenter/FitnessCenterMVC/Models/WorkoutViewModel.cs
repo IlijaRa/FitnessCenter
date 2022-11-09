@@ -5,7 +5,7 @@ using System.Xml.Linq;
 
 namespace FitnessCenterMVC.Models
 {
-    public class WorkoutViewModel
+    public class WorkoutViewModel : IComparable<WorkoutViewModel>
     {
         public int Id { get; set; }
 
@@ -49,5 +49,12 @@ namespace FitnessCenterMVC.Models
 
         [Required(ErrorMessage = "You need to provide a capacity.")]
         public int Capacity { get; set; }
+
+        // property used for sorting workout by price
+        public int CompareTo(WorkoutViewModel other)
+        {
+            return this.Price.CompareTo(other.Price);
+        }
+
     }
 }

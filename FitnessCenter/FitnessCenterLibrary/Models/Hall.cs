@@ -11,7 +11,6 @@ namespace FitnessCenterLibrary.Models
     {
         public int Id { get; set; }
 
-
         [Required(ErrorMessage = "You need to provide a capacity.")]
         public int Capacity { get; set; }
 

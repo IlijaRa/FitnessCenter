@@ -9,12 +9,10 @@ namespace FitnessCenterLibrary.Models
 {
     public class Term
     {
-
         [Display(Name = "Free space")]
         public int FreeSpace { get; set; }
 
         //navigation properties
-        //composite key
         public string CoachId { get; set; } //string because IdentityUser id is string type
         public Coach Coach { get; set; }
         public int WorkoutId { get; set; }

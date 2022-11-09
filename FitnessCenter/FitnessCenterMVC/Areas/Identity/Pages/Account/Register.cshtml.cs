@@ -142,6 +142,7 @@ namespace FitnessCenterMVC.Areas.Identity.Pages.Account
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
                     //Adds registered user to a certain role
+                    //TODO:Change this so that user is added to a role by Identity API
                     AddToAspNetUserRolesTable(userId);
 
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

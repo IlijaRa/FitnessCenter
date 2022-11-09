@@ -47,15 +47,15 @@ namespace FitnessCenterMVC.ModelMapper
             workoutViewModel.Capacity = model.Capacity;
             workoutViewModel.CoachId = model.CoachId;
 
-            if (model.Type.Equals("Conditional"))
+            if (model.Type == Enums.WorkoutType.Conditional)
             {
                 workoutViewModel.Type = Enums.WorkoutType.Conditional.ToString();
             }
-            else if (model.Type.Equals("PowerLifting"))
+            else if (model.Type == Enums.WorkoutType.PowerLifting)
             {
                 workoutViewModel.Type = Enums.WorkoutType.PowerLifting.ToString();
             }
-            else
+            else if (model.Type == Enums.WorkoutType.Bodybuilding)
             {
                 workoutViewModel.Type = Enums.WorkoutType.Bodybuilding.ToString();
             }
