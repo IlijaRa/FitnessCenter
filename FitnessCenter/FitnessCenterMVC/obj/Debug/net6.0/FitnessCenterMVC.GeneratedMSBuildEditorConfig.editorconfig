@@ -55,6 +55,14 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29hY2hcR2V0QWxsSW5hY3RpdmVDb2FjaGVzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/GitHubRepositories/FitnessCenter/FitnessCenter/FitnessCenterMVC/Views/FitnessCenterMember/EnrollInWorkout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRml0bmVzc0NlbnRlck1lbWJlclxFbnJvbGxJbldvcmtvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GitHubRepositories/FitnessCenter/FitnessCenter/FitnessCenterMVC/Views/FitnessCenterMember/GetAllEnrolledWorkouts.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRml0bmVzc0NlbnRlck1lbWJlclxHZXRBbGxFbnJvbGxlZFdvcmtvdXRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/GitHubRepositories/FitnessCenter/FitnessCenter/FitnessCenterMVC/Views/FitnessCenter/AddFitnessCenter.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRml0bmVzc0NlbnRlclxBZGRGaXRuZXNzQ2VudGVyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
@@ -109,10 +117,6 @@ build_metadata.AdditionalFiles.CssScope =
 
 [D:/GitHubRepositories/FitnessCenter/FitnessCenter/FitnessCenterMVC/Views/Workout/EditWorkout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcV29ya291dFxFZGl0V29ya291dC5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/GitHubRepositories/FitnessCenter/FitnessCenter/FitnessCenterMVC/Views/Workout/EnrollInWorkout.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcV29ya291dFxFbnJvbGxJbldvcmtvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/GitHubRepositories/FitnessCenter/FitnessCenter/FitnessCenterMVC/Views/Workout/GetAllWorkouts.cshtml]
