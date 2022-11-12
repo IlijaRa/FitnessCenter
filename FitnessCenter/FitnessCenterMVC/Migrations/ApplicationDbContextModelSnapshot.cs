@@ -65,7 +65,7 @@ namespace FitnessCenterMVC.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FitnessCenter");
+                    b.ToTable("FitnessCenter", (string)null);
                 });
 
             modelBuilder.Entity("FitnessCenterLibrary.Models.FitnessCenterHall", b =>
@@ -83,7 +83,7 @@ namespace FitnessCenterMVC.Migrations
                     b.HasIndex("HallId")
                         .IsUnique();
 
-                    b.ToTable("FitnessCenterHall");
+                    b.ToTable("FitnessCenterHall", (string)null);
                 });
 
             modelBuilder.Entity("FitnessCenterLibrary.Models.FitnessMemberWorkout", b =>
@@ -94,17 +94,20 @@ namespace FitnessCenterMVC.Migrations
                     b.Property<int>("WorkoutId")
                         .HasColumnType("int");
 
-                    b.Property<double>("Rate")
+                    b.Property<double>("CoachRate")
                         .HasColumnType("float");
 
                     b.Property<int>("State")
                         .HasColumnType("int");
 
+                    b.Property<double>("WorkoutRate")
+                        .HasColumnType("float");
+
                     b.HasKey("FitnessCenterMemberId", "WorkoutId");
 
                     b.HasIndex("WorkoutId");
 
-                    b.ToTable("FitnessMemberWorkout");
+                    b.ToTable("FitnessMemberWorkout", (string)null);
                 });
 
             modelBuilder.Entity("FitnessCenterLibrary.Models.Hall", b =>
@@ -130,7 +133,7 @@ namespace FitnessCenterMVC.Migrations
 
                     b.HasIndex("FitnessCenterId");
 
-                    b.ToTable("Hall");
+                    b.ToTable("Hall", (string)null);
                 });
 
             modelBuilder.Entity("FitnessCenterLibrary.Models.Schedule", b =>
@@ -160,7 +163,7 @@ namespace FitnessCenterMVC.Migrations
 
                     b.HasIndex("TermCoachId", "TermWorkoutId");
 
-                    b.ToTable("Schedule");
+                    b.ToTable("Schedule", (string)null);
                 });
 
             modelBuilder.Entity("FitnessCenterLibrary.Models.Term", b =>
@@ -179,7 +182,7 @@ namespace FitnessCenterMVC.Migrations
                     b.HasIndex("WorkoutId")
                         .IsUnique();
 
-                    b.ToTable("Term");
+                    b.ToTable("Term", (string)null);
                 });
 
             modelBuilder.Entity("FitnessCenterLibrary.Models.User", b =>
@@ -310,7 +313,7 @@ namespace FitnessCenterMVC.Migrations
 
                     b.HasIndex("CoachId");
 
-                    b.ToTable("Workout");
+                    b.ToTable("Workout", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

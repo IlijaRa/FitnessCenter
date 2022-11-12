@@ -57,4 +57,25 @@ namespace FitnessCenterMVC.Models
         }
 
     }
+
+    public class RateWorkoutViewModel : WorkoutViewModel
+    {
+        [Display(Name = "Workout rate")]
+        [Required]
+        [Range(1,10, ErrorMessage = "You need to provide the rate between 1-10.")]
+        public int WorkoutRate { get; set; }
+
+        [Display(Name = "Coach rate")]
+        [Required]
+        [Range(1, 10, ErrorMessage = "You need to provide the rate between 1-10.")]
+        public int CoachRate { get; set; }
+    }
+
+    public class CompletedWorkoutViewModel
+    {
+        public List<WorkoutViewModel> rated_workouts { get; set; } = new List<WorkoutViewModel>();
+        public List<WorkoutViewModel> unrated_workouts { get; set; } = new List<WorkoutViewModel>();
+    }
+
+
 }

@@ -7,7 +7,6 @@ namespace FitnessCenterMVC.Models
         [Required]
         public double Rating { get; set; }
 
-
         public int FitnessCenterId { get; set; }
     }
 }

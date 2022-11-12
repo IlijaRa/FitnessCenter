@@ -14,14 +14,16 @@ namespace FitnessCenterLibrary.Models
         [Required]
         public Enums.WorkoutState State { get; set; }
 
-        public double Rate { get; set; }
+        [Range(1,10, ErrorMessage = "You need to provide the rate between 1-10.")]
+        public double WorkoutRate { get; set; }
+
+        [Range(1, 10, ErrorMessage = "You need to provide the rate between 1-10.")]
+        public double CoachRate { get; set; }
 
         //navigation properties
         public string FitnessCenterMemberId { get; set; } // string because IdentityUser id is string type
         public FitnessCenterMember FitnessCenterMember { get; set; }
         public int WorkoutId { get; set; }
         public Workout Workout { get; set; }
-
-
     }
 }
