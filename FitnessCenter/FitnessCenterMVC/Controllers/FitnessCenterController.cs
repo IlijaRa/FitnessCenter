@@ -31,7 +31,7 @@ namespace FitnessCenterMVC.Controllers
                 return View("Error");
             }
 
-            var fitnessCenter = FitnessCenterConversions.ConvertToFintessCenter(model);
+            var fitnessCenter = FitnessCenterMapper.ConvertToFintessCenter(model);
             await _context.FitnessCenter.AddAsync(fitnessCenter);
             await _context.SaveChangesAsync();
             return RedirectToAction("GetAllFitnessCenters", "FitnessCenter");
@@ -50,11 +50,11 @@ namespace FitnessCenterMVC.Controllers
 
             EditFitnessCenterViewModel model = new EditFitnessCenterViewModel();
             List<HallViewModel> hallViewModels = new List<HallViewModel>();
-            var fitnessCenterViewModel = FitnessCenterConversions.ConvertToFintessCenterViewModel(fitnessCenter);
+            var fitnessCenterViewModel = FitnessCenterMapper.ConvertToFintessCenterViewModel(fitnessCenter);
 
             foreach (var hall in halls)
             {
-            hallViewModels.Add(HallConversions.ConvertToHallViewModel(hall));
+            hallViewModels.Add(HallMApper.ConvertToHallViewModel(hall));
             }
 
             model.fitnessCenter = fitnessCenterViewModel;
@@ -97,7 +97,7 @@ namespace FitnessCenterMVC.Controllers
 
             foreach (var fitnessCenter in fitnessCenters)
             {
-                fitnessCenterViewModels.Add(FitnessCenterConversions.ConvertToFintessCenterViewModel(fitnessCenter));
+                fitnessCenterViewModels.Add(FitnessCenterMapper.ConvertToFintessCenterViewModel(fitnessCenter));
             }
             return View(fitnessCenterViewModels);
         }

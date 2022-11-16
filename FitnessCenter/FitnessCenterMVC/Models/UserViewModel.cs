@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using FitnessCenterLibrary.Models;
+using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
 
 namespace FitnessCenterMVC.Models
@@ -61,5 +62,12 @@ namespace FitnessCenterMVC.Models
         [Display(Name = "Is account active?")]
         [Required]
         public bool IsActive { get; set; }
+    }
+
+    public class AllUsersViewModel
+    {
+        public List<CoachViewModel> coaches { get; set; } = new List<CoachViewModel>();
+        public List<FitnessCenterMemberViewModel> members { get; set; } = new List<FitnessCenterMemberViewModel>();
+        public List<AdministratorViewModel> administrators { get; set; } = new List<AdministratorViewModel>();
     }
 }

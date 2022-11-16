@@ -1,4 +1,5 @@
-﻿using FitnessCenterLibrary.Models;
+﻿using AutoMapper.Execution;
+using FitnessCenterLibrary.Models;
 using FitnessCenterMVC.Data;
 using FitnessCenterMVC.ModelMapper;
 using FitnessCenterMVC.Models;
@@ -21,6 +22,34 @@ namespace FitnessCenterMVC.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> DeleteFitnessCenterMember(string id)
+        {
+            var member = await _context.FitnessCenterMember.FirstOrDefaultAsync(x => x.Id == id);
+            if (member == null)
+            {
+                // if we got here, something failed
+                return View("Error");
+            }
+
+            var fitnessMemberWorkouts = await _context.FitnessMemberWorkout.ToListAsync();
+            var member_workout_to_delete = new List<FitnessMemberWorkout>();
+
+
+            foreach (var fmw in fitnessMemberWorkouts)
+            {
+                if (fmw.FitnessCenterMemberId == id)
+                {
+                    member_workout_to_delete.Add(fmw);
+                }
+            }
+
+            _context.FitnessMemberWorkout.RemoveRange(member_workout_to_delete);
+            _context.FitnessCenterMember.Remove(member);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("GetAllInactiveCoaches", "Coach");
+        }
+
+        [HttpGet]
         public async Task<IActionResult> EnrollInWorkout(int id)
         {
             var term = _context.Term.FirstOrDefault(x => x.WorkoutId == id);
@@ -31,7 +60,7 @@ namespace FitnessCenterMVC.Controllers
                 ViewData["ErrorMessage"] = "Request couldn't be executed!";
                 return View("Error");
             }
-            var workoutViewModel = WorkoutConversions.ConvertToWorkoutViewModel(workout);
+            var workoutViewModel = WorkoutMapper.ConvertToWorkoutViewModel(workout);
 
             // We are putting freespace value into capacity, because maybe someone have enrolled in workout already
             workoutViewModel.Capacity = term.FreeSpace;
@@ -109,7 +138,7 @@ namespace FitnessCenterMVC.Controllers
 
             foreach (var workout in workouts)
             {
-                workoutViewModels.Add(WorkoutConversions.ConvertToWorkoutViewModel(workout));
+                workoutViewModels.Add(WorkoutMapper.ConvertToWorkoutViewModel(workout));
             }
 
             return View(workoutViewModels);
@@ -138,7 +167,7 @@ namespace FitnessCenterMVC.Controllers
                                WorkoutRate = memberWorkout.WorkoutRate,
                                CoachRate = memberWorkout.CoachRate
                            };
-        
+
             foreach (var workout in workouts)
             {
                 var workoutViewModel = new WorkoutViewModel();

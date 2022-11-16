@@ -16,7 +16,7 @@ namespace FitnessCenterLibrary.Models
         //navigation properties
         public int FitnessCenterId { get; set; }
         public FitnessCenter FitnessCenter { get; set; }
-        public ICollection<Workout>? Workouts { get; set; } //TODO: Check whether ? makes property nullable
-        public ICollection<Term>? Terms { get; set; } //TODO: Check whether ? makes property nullable
+        public ICollection<Workout>? Workouts { get; set; }
+        public ICollection<Term>? Terms { get; set; }
     }
 }

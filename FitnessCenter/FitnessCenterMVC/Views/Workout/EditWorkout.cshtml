@@ -1,5 +1,6 @@
 ﻿@model FitnessCenterMVC.Models.WorkoutViewModel
 @{
+    string[] types = new[] { "Conditional", "PowerLifting", "Bodybuilding" };
 }
 <div class="row">
     <div class="col-md-6 mx-auto">
@@ -10,7 +11,8 @@
             <div class="card-body">
                 <form asp-action="EditWorkout" method="post">
                     <div asp-validation-summary="All" class="text-danger"></div>
-
+                    @*@Html.ValidationSummary(true)
+                    @Html.ValidationMessage("CustomError")*@
                     @Html.HiddenFor(m =>m.CoachId)
 
                     <div class="form-group">
@@ -24,7 +26,7 @@
                         <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
 
-                    @foreach (var type in Model.Types)
+                    @foreach (var type in types)
                     {
                         @Html.RadioButtonFor(model => model.Type, type) @type
 

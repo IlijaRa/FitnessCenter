@@ -1,4 +1,5 @@
-﻿using FitnessCenterLibrary.Models;
+﻿using AutoMapper.Execution;
+using FitnessCenterLibrary.Models;
 using FitnessCenterMVC.Data;
 using FitnessCenterMVC.ModelMapper;
 using FitnessCenterMVC.Models;
@@ -26,9 +27,11 @@ namespace FitnessCenterMVC.Controllers
             var workouts = await _context.Workout.ToListAsync();
             var workoutViewModels = new List<WorkoutViewModel>();
 
+            ChangeWorkoutStatusToCompleted(workouts);
+
             foreach (var workout in workouts)
             {
-                workoutViewModels.Add(WorkoutConversions.ConvertToWorkoutViewModel(workout));
+                workoutViewModels.Add(WorkoutMapper.ConvertToWorkoutViewModel(workout));
             }
             if (sortCriteria.Equals("price"))
             {
@@ -48,6 +51,24 @@ namespace FitnessCenterMVC.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        private async Task ChangeWorkoutStatusToCompleted(List<Workout> workouts)
+        {
+            var member = await _context.FitnessCenterMember.Where(x => x.UserName == User.Identity.Name).FirstOrDefaultAsync();
+
+            foreach (var workout in workouts)
+            {
+                if (workout.EndTime < DateTime.Now)
+                {
+                    var fitnessMemberWorkout = await _context.FitnessMemberWorkout.Where(x => x.FitnessCenterMemberId == member.Id && x.WorkoutId == workout.Id).FirstOrDefaultAsync();
+                    if (fitnessMemberWorkout != null)
+                    {
+                        fitnessMemberWorkout.State = Enums.WorkoutState.Completed;
+                    }
+                }
+            }
+            _context.SaveChangesAsync();
         }
     }
 }

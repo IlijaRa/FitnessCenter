@@ -34,7 +34,7 @@ namespace FitnessCenterMVC.Controllers
                 return View("Error");
             }
 
-            var hall = HallConversions.ConvertToHall(model);
+            var hall = HallMApper.ConvertToHall(model);
 
             await _context.Hall.AddAsync(hall);
             await _context.SaveChangesAsync();
@@ -63,7 +63,7 @@ namespace FitnessCenterMVC.Controllers
         public IActionResult EditHall(int id)
         {
             var hall = _context.Hall.FirstOrDefault(x => x.Id == id);
-            var hallViewModel = HallConversions.ConvertToHallViewModel(hall);
+            var hallViewModel = HallMApper.ConvertToHallViewModel(hall);
 
             return View(hallViewModel);
         }

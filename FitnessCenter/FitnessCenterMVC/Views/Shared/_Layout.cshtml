@@ -33,9 +33,9 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Coach" asp-action="GetAllInactiveCoaches">Get inactive coaches</a>
                             </li>
-                            @*<li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Role" asp-action="Index">Get all roles</a>
-                            </li>*@
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="GetAllUsers">Get all users</a>
+                            </li>
                         }
                         @if (User.IsInRole("Coach"))
                         {

@@ -1,0 +1,134 @@
+﻿@model FitnessCenterMVC.Models.AllUsersViewModel
+@{
+}
+
+<h1>List of administrators</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>User name</th>
+            <th>Email address</th>
+            <th>Is active?</th>
+            <th>Employment day</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.administrators)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Surname)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsActive)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmploymentDay)
+                </td>
+                <td>
+                    <a asp-action="DeleteAdministrator" asp-controller="Administrator" asp-route-id="@item.Id"
+                   onclick="return confirm('Are you sure that you want to delete administrator @item.UserName ?')">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h1>List of coaches</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>User name</th>
+            <th>Email address</th>
+            <th>Is active?</th>
+            <th>Rating</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.coaches)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Surname)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsActive)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rating)
+                </td>
+                <td>
+                    <a asp-action="DeleteCoach" asp-controller="Coach" asp-route-id="@item.Id"
+                   onclick="return confirm('Are you sure that you want to delete coach @item.UserName ?')">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h1>List of members</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>User name</th>
+            <th>Email address</th>
+            <th>Is active?</th>
+            <th>First membership</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.members)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Surname)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsActive)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstMembership)
+                </td>
+                <td>
+                    <a asp-action="DeleteFitnessCenterMember" asp-controller="FitnessCenterMember" asp-route-id="@item.Id"
+                   onclick="return confirm('Are you sure that you want to delete member @item.UserName ?')">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

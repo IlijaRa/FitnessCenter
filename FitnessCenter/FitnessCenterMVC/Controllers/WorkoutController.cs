@@ -48,7 +48,7 @@ namespace FitnessCenterMVC.Controllers
 
             try
             {
-                var workout = WorkoutConversions.ConvertToWorkout(model);
+                var workout = WorkoutMapper.ConvertToWorkout(model);
                 await _context.Workout.AddAsync(workout);
                 await _context.SaveChangesAsync();
 
@@ -79,7 +79,7 @@ namespace FitnessCenterMVC.Controllers
                 return View("Error");
             }
 
-            var workoutViewModel = WorkoutConversions.ConvertToWorkoutViewModel(workout);
+            var workoutViewModel = WorkoutMapper.ConvertToWorkoutViewModel(workout);
 
             return View(workoutViewModel);
         }
@@ -121,7 +121,17 @@ namespace FitnessCenterMVC.Controllers
                     await _context.SaveChangesAsync();
 
                     var term = _context.Term.FirstOrDefault(x => x.CoachId == model.CoachId && x.WorkoutId == model.Id);
-                    term.FreeSpace = model.Capacity; //TODO: Make calculation by suptracting freespace with someone who already reserved this term. 
+                    var enrolledMemberWorkouts = await _context.FitnessMemberWorkout
+                        .Where(x => x.WorkoutId == workout.Id && x.State == Enums.WorkoutState.NonCompleted)
+                        .ToListAsync();
+
+                    if (enrolledMemberWorkouts.Count > model.Capacity)
+                    {
+                        ModelState.AddModelError("CustomError", "You cannot lower capacity this much because number of reservations is larger than this number!");
+                        return View();
+                    }
+
+                    term.FreeSpace = model.Capacity - enrolledMemberWorkouts.Count;
                     await _context.SaveChangesAsync();
                     transaction.Complete();
                 }
@@ -152,7 +162,7 @@ namespace FitnessCenterMVC.Controllers
 
             foreach (var workout in workouts)
             {
-                workoutViewModels.Add(WorkoutConversions.ConvertToWorkoutViewModel(workout));
+                workoutViewModels.Add(WorkoutMapper.ConvertToWorkoutViewModel(workout));
             }
             return View(workoutViewModels);
         }
@@ -204,7 +214,7 @@ namespace FitnessCenterMVC.Controllers
             {
                 if (HasSimilarities(workout, searching))
                 {
-                    found_workouts.Add(WorkoutConversions.ConvertToWorkoutViewModel(workout));
+                    found_workouts.Add(WorkoutMapper.ConvertToWorkoutViewModel(workout));
                 }
             }
 

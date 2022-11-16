@@ -1,5 +1,6 @@
 ﻿@model FitnessCenterMVC.Models.WorkoutViewModel
 @{
+    string[] types = new[] { "Conditional", "PowerLifting", "Bodybuilding" };
 }
 <div class="row">
     <div class="col-md-6 mx-auto">
@@ -24,7 +25,7 @@
                         <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
 
-                    @foreach (var type in Model.Types)
+                    @foreach (var type in types)
                     {
                         @Html.RadioButtonFor(model => model.Type, type) @type<br />
                     }

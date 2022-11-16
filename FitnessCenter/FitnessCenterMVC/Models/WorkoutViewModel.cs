@@ -27,7 +27,7 @@ namespace FitnessCenterMVC.Models
         [Required(ErrorMessage = "You need to provide a type of training.")]
         [BindProperty]
         public string Type { get; set; }
-        public string[] Types = new[] { "Conditional", "PowerLifting", "Bodybuilding" };
+        //public string[] Types = new[] { "Conditional", "PowerLifting", "Bodybuilding" };
 
         [Display(Name = "Start time")]
         [DataType(DataType.DateTime)]
